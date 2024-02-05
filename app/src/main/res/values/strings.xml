@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Password Notes</string>
+    <string name="input_form_weight_title">重要性：</string>
+    <string name="input_form_weight_radio_extreme">很高</string>
+    <string name="input_form_weight_radio_high">较高</string>
+    <string name="input_form_weight_radio_medium">一般</string>
+    <string name="input_form_weight_radio_low">较低</string>
+    <string name="input_form_tag_title">标签：</string>
+    <string name="input_form_name_title">账号：</string>
+    <string name="input_form_password_title">密码：</string>
+    <string name="input_form_remark_title">备注：</string>
+    <string name="input_form_button_cancel_text">取消</string>
+    <string name="input_form_button_confirm_text">添加</string>
+    <string name="action_bar_search_view_text">输入标签搜索</string>
+    <string name="action_bar_title_text"><![CDATA[Password->1月测试版]]></string>
+    <string name="action_bar_search_view_hint_text">由标签或备注搜索</string>
+    <string name="edit_form_id_title">序号：</string>
+    <string name="edit_form_id_text">0</string>
+    <string name="edit_form_tag_title">标签：</string>
+    <string name="edit_form_name_title">账号：</string>
+    <string name="edit_form_password_title">密码：</string>
+    <string name="edit_form_remark_title">备注：</string>
+    <string name="edit_form_weight_title">重要性：</string>
+    <string name="edit_form_time_title">时间：</string>
+    <string name="edit_form_time_text">1706889600</string>
+    <string name="edit_form_priority_title">优先级：</string>
+    <string name="edit_form_submit_button_text">提交修改</string>
+    <string name="edit_form_recycler_button_text">删除账户</string>
+    <string name="drawer_page_recycler_text">废纸篓</string>
+</resources>

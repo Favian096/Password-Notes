@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="edit_text_line_style" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/system_gray_middle_up</item>//默认颜色
+        <item name="colorControlActivated">@color/system_gray_deep</item>//输入时颜色
+    </style>
+
+</resources>
