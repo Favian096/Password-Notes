@@ -43,7 +43,7 @@
                     android:layout_width="8dp"
                     android:layout_height="8dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:alpha="0.8"
                     app:cardBackgroundColor="@color/system_red"
                     app:cardCornerRadius="4dp" />
@@ -55,8 +55,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="8dp"
-                    android:text="标签名称"
-                    android:textSize="15dp" />
+                    android:text="@string/item_list_card_tag_title"
+                    android:textSize="15sp" />
 
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -67,9 +67,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:text="Favian096"
+                android:text="@string/item_list_card_name_text"
                 android:textColor="@color/system_gray_deep"
-                android:textSize="17dp"
+                android:textSize="17sp"
                 android:textStyle="bold" />
 
             <View
@@ -84,9 +84,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="comLy151515455454454"
+                android:text="@string/item_list_card_password_text"
                 android:textColor="@color/system_gray_deep"
-                android:textSize="17dp"
+                android:textSize="17sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -94,9 +94,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:text="没有备注......"
+                android:text="@string/item_list_card_remark_text"
                 android:textColor="@color/system_gray_middle_up"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textStyle="italic" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

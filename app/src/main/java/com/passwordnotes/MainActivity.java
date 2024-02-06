@@ -69,22 +69,6 @@ public class MainActivity extends AppCompatActivity {
     private SearchView action_bar_search_view;
     // 抽屉页面控件
     private View drawer_recycler_view;
-    ActivityResultLauncher<Intent> intentActivityResultLauncher =
-            registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
-                    (ActivityResultCallback<ActivityResult>) result -> {
-                        if (result.getData() != null && result.getResultCode() == Activity.RESULT_OK) {
-                            Account account = accountMapper.getAccount(result.getData().getIntExtra("id", 0));
-                            allAccounts.set(result.getData().getIntExtra("position", 0), account);
-                            itemAdapter.notifyItemChanged(result.getData().getIntExtra("position", 0));
-                        } else if (result.getData() != null && result.getResultCode() == Activity.RESULT_FIRST_USER) {
-                            allAccounts.remove(result.getData().getIntExtra("position", 0));
-                            itemAdapter.notifyItemRemoved(result.getData().getIntExtra("position", 0));
-                        }
-                        InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
-                        if (imm.isActive()) // 隐藏键盘
-                            imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    });
 
     @SuppressLint({"MissingInflatedId", "UseCompatLoadingForDrawables"})
     @Override
@@ -95,226 +79,8 @@ public class MainActivity extends AppCompatActivity {
         initData();
         initLayout();
         basicOnclickHandler();
-
-        allAccounts.forEach(System.out::println);
     }
 
-    /**
-     * 处理标题栏下滑即可滑动出新增填写表单
-     */
-    @SuppressLint({"ClickableViewAccessibility", "NonConstantResourceId"})
-    private void inputFlingFromHandler() {
-//        Fling显示表单
-        GestureDetector gestureDetector = new GestureDetector(this,
-                new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
-//                        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0)
-                        pullDownLayout.openInputPage();
-                        return super.onFling(e1, e2, velocityX, velocityY);
-                    }
-                });
-
-        action_bar_title.setOnTouchListener((v, event) -> {
-            gestureDetector.onTouchEvent(event);
-            return true;
-        });
-
-        /*按钮和信息记录*/
-        // 取消按钮
-        formCancel.setOnClickListener(
-                v -> {
-                    clearInputFormMsg();
-                    pullDownLayout.returnMainPage();
-                    InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
-                    if (imm.isActive()) // 隐藏键盘
-                        imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-        );
-        // 确认按钮
-        formConfirm.setOnClickListener(
-                v -> {
-                    int weight = -1;
-                    switch (weightRadioGroup.getCheckedRadioButtonId()) {
-                        case R.id.input_form_weight_radio_extreme:
-                            weight = 0;
-                            break;
-                        case R.id.input_form_weight_radio_high:
-                            weight = 1;
-                            break;
-                        case R.id.input_form_weight_radio_medium:
-                            weight = 2;
-                            break;
-                        case R.id.input_form_weight_radio_low:
-                            weight = 3;
-                            break;
-                        default:
-                            break;
-                    }
-                    if (-1 == weight) {
-                        Toast.makeText(this, "请选择重要性！", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    String tag = tagEditText.getText().toString();
-                    if (tag.isEmpty()) {
-                        Toast.makeText(this, "标签是必填选项！", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    String name = nameEditText.getText().toString();
-                    String password = passwordEditText.getText().toString();
-                    String remark = remarkEditText.getText().toString();
-                    Account newAccount = new Account(
-                            tag,
-                            name,
-                            password,
-                            remark,
-                            weight,
-                            new Date().getTime(),
-                            0,
-                            1
-                    );
-                    if (!accountMapper.saveAccount(newAccount)) {
-                        return;
-                    }
-                    int numOfList = allAccounts.size();
-                    allAccounts.clear();
-                    itemAdapter.notifyItemRangeRemoved(0, numOfList);
-                    allAccounts.addAll(accountMapper.getAllAccounts());
-                    itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
-                    clearInputFormMsg();
-                    pullDownLayout.returnMainPage();
-                    InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
-                    if (imm.isActive()) // 隐藏键盘
-                        imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-        );
-
-    }
-
-    /**
-     * 清空输入信息
-     */
-    private void clearInputFormMsg() {
-        weightRadioGroup.clearCheck();
-        tagEditText.setText(null);
-        nameEditText.setText(null);
-        passwordEditText.setText(null);
-        remarkEditText.setText(null);
-    }
-
-    /**
-     * 处理页面按钮点击事件
-     */
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private void basicOnclickHandler() {
-        inputFlingFromHandler();
-        actionBarSearchHandler();
-        itemClickHandler();
-
-        // 标题栏菜单按钮
-        baseline_menu.setOnClickListener(
-                v -> {
-                    if (!drawerLayout.isOpen()) {
-                        baseline_menu.setImageDrawable(getDrawable(baseline_back_24));
-                        drawerLayout.open();
-                    } else {
-                        drawerLayout.close();
-                    }
-                }
-        );
-
-        // 跳转回收页面
-        drawer_recycler_view.setOnClickListener(
-                v -> {
-                    Intent recycleIntent = new Intent(MainActivity.this, RecycleItemActivity.class);
-
-                    startActivity(recycleIntent,
-                            ActivityOptions.makeSceneTransitionAnimation(
-                                    MainActivity.this,
-                                    drawer_recycler_view,
-                                    "anim_transition_recycle_item"
-                            ).toBundle());
-                }
-        );
-
-    }
-
-    /**
-     * 处理recyclerView列表项目事件
-     */
-    private void itemClickHandler() {
-        itemAdapter.setOnItemClickListener(new RecyclerListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, int id) {
-                // 写入系统剪贴板
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clipAccountData = ClipData.newPlainText("账户", allAccounts.get(position).getName());
-                clipboard.setPrimaryClip(clipAccountData);
-                // 使用 Handler 添加延迟, 保证第三方输入法可以连续读取到
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    ClipData clipPasswordData = ClipData.newPlainText("密码", allAccounts.get(position).getPassword());
-                    clipboard.setPrimaryClip(clipPasswordData);
-                }, 1000);
-            }
-
-            @Override
-            public void onItemLongClick(int position, int id) {
-                Intent editIntent = new Intent(MainActivity.this, EditItemActivity.class);
-                editIntent.putExtra("id", id);
-                editIntent.putExtra("position", position);
-                // startActivity(editIntent,
-                //         ActivityOptions
-                //                 .makeSceneTransitionAnimation(
-                //                         MainActivity.this,
-                //                         recyclerView.getChildAt(position),
-                //                         "item_translation_anim")
-                //                 .toBundle());
-                // System.out.println(accountMapper.getAccount(id).toString());
-                intentActivityResultLauncher.launch(editIntent,
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                MainActivity.this,
-                                recyclerView.getChildAt(position),
-                                "item_translation_anim"));
-            }
-        });
-    }
-
-    /**
-     * 处理搜索事件
-     */
-    private void actionBarSearchHandler() {
-        action_bar_search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                List<Account> accountsQuery = accountMapper.getAccountsByTag(newText, newText);
-                int numOfList = allAccounts.size();
-                allAccounts.clear();
-                itemAdapter.notifyItemRangeRemoved(0, numOfList);
-                allAccounts.addAll(accountsQuery);
-                itemAdapter.notifyItemRangeInserted(0, accountsQuery.size());
-                return false;
-            }
-        });
-
-        action_bar_search_view.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                int numOfList = allAccounts.size();
-                allAccounts.clear();
-                itemAdapter.notifyItemRangeRemoved(0, numOfList);
-                allAccounts.addAll(accountMapper.getAllAccounts());
-                itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
-                return false;
-            }
-        });
-
-
-    }
 
     /**
      * 初始化标题栏, 在中间嵌入自定义样式View, 优化阴影效果
@@ -375,6 +141,252 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(itemAdapter);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+    }
+
+    /**
+     * 处理标题栏下滑即可滑动出新增填写表单
+     */
+    @SuppressLint({"ClickableViewAccessibility", "NonConstantResourceId"})
+    private void inputFlingFromHandler() {
+//        Fling显示表单
+        GestureDetector gestureDetector = new GestureDetector(this,
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+//                        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                        pullDownLayout.openInputPage();
+                        return super.onFling(e1, e2, velocityX, velocityY);
+                    }
+                });
+
+        action_bar_title.setOnTouchListener((v, event) -> {
+            gestureDetector.onTouchEvent(event);
+            return true;
+        });
+
+        /*按钮和信息记录*/
+        // 取消按钮
+        formCancel.setOnClickListener(
+                v -> {
+                    clearInputFormMsg();
+                    pullDownLayout.returnMainPage();
+                    clearInputFlingFromFocus();
+                    InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
+                    if (imm.isActive()) // 隐藏键盘
+                        imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+        );
+        // 确认按钮
+        formConfirm.setOnClickListener(
+                v -> {
+                    int weight = -1;
+                    switch (weightRadioGroup.getCheckedRadioButtonId()) {
+                        case R.id.input_form_weight_radio_extreme:
+                            weight = 0;
+                            break;
+                        case R.id.input_form_weight_radio_high:
+                            weight = 1;
+                            break;
+                        case R.id.input_form_weight_radio_medium:
+                            weight = 2;
+                            break;
+                        case R.id.input_form_weight_radio_low:
+                            weight = 3;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (-1 == weight) {
+                        Toast.makeText(this, "请选择重要性！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String tag = tagEditText.getText().toString();
+                    if (tag.isEmpty()) {
+                        Toast.makeText(this, "标签是必填选项！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String name = nameEditText.getText().toString();
+                    String password = passwordEditText.getText().toString();
+                    String remark = remarkEditText.getText().toString();
+                    Account newAccount = new Account(
+                            tag,
+                            name,
+                            password,
+                            remark,
+                            weight,
+                            new Date().getTime(),
+                            0,
+                            1
+                    );
+                    if (!accountMapper.saveAccount(newAccount)) {
+                        return;
+                    }
+                    int numOfList = allAccounts.size();
+                    allAccounts.clear();
+                    itemAdapter.notifyItemRangeRemoved(0, numOfList);
+                    allAccounts.addAll(accountMapper.getAllAccounts());
+                    itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+                    clearInputFormMsg();
+                    pullDownLayout.returnMainPage();
+                    clearInputFlingFromFocus();
+                    InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
+                    if (imm.isActive()) // 隐藏键盘
+                        imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+        );
+
+    }
+
+    /**
+     * 清空输入信息
+     */
+    private void clearInputFormMsg() {
+        weightRadioGroup.clearCheck();
+        tagEditText.setText(null);
+        nameEditText.setText(null);
+        passwordEditText.setText(null);
+        remarkEditText.setText(null);
+    }
+
+    /**
+     * 清除新增填写表单focus
+     */
+    private void clearInputFlingFromFocus() {
+        tagEditText.clearFocus();
+        nameEditText.clearFocus();
+        passwordEditText.clearFocus();
+        remarkEditText.clearFocus();
+    }
+
+    /**
+     * 处理页面按钮点击事件
+     */
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void basicOnclickHandler() {
+        inputFlingFromHandler();
+        actionBarSearchHandler();
+        itemClickHandler();
+
+        // 标题栏菜单按钮
+        baseline_menu.setOnClickListener(
+                v -> {
+                    if (!drawerLayout.isOpen()) {
+                        baseline_menu.setImageDrawable(getDrawable(baseline_back_24));
+                        drawerLayout.open();
+                    } else {
+                        drawerLayout.close();
+                    }
+                }
+        );
+
+        // 跳转回收页面
+        drawer_recycler_view.setOnClickListener(
+                v -> {
+                    Intent recycleIntent = new Intent(MainActivity.this, RecycleItemActivity.class);
+
+                    startActivity(recycleIntent,
+                            ActivityOptions.makeSceneTransitionAnimation(
+                                    MainActivity.this,
+                                    drawer_recycler_view,
+                                    "anim_transition_recycle_item"
+                            ).toBundle());
+                }
+        );
+
+    }
+
+    ActivityResultLauncher<Intent> intentActivityResultLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    (ActivityResultCallback<ActivityResult>) result -> {
+                        if (result.getData() != null && result.getResultCode() == Activity.RESULT_OK) {
+                            Account account = accountMapper.getAccount(result.getData().getIntExtra("id", 0));
+                            allAccounts.set(result.getData().getIntExtra("position", 0), account);
+                            itemAdapter.notifyItemChanged(result.getData().getIntExtra("position", 0));
+                        } else if (result.getData() != null && result.getResultCode() == Activity.RESULT_FIRST_USER) {
+                            allAccounts.remove(result.getData().getIntExtra("position", 0));
+                            itemAdapter.notifyItemRemoved(result.getData().getIntExtra("position", 0));
+                        }
+                        InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
+                        if (imm.isActive()) // 隐藏键盘
+                            imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    });
+
+    /**
+     * 处理recyclerView列表项目事件
+     */
+    private void itemClickHandler() {
+        itemAdapter.setOnItemClickListener(new RecyclerListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, int id) {
+                // 写入系统剪贴板
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipAccountData = ClipData.newPlainText("账户", allAccounts.get(position).getName());
+                clipboard.setPrimaryClip(clipAccountData);
+                // 使用 Handler 添加延迟, 保证第三方输入法可以连续读取到
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    ClipData clipPasswordData = ClipData.newPlainText("密码", allAccounts.get(position).getPassword());
+                    clipboard.setPrimaryClip(clipPasswordData);
+                }, 1000);
+            }
+
+            @Override
+            public void onItemLongClick(int position, int id) {
+                Intent editIntent = new Intent(MainActivity.this, EditItemActivity.class);
+                editIntent.putExtra("id", id);
+                editIntent.putExtra("position", position);
+                // startActivity(editIntent,
+                //         ActivityOptions
+                //                 .makeSceneTransitionAnimation(
+                //                         MainActivity.this,
+                //                         recyclerView.getChildAt(position),
+                //                         "item_translation_anim")
+                //                 .toBundle());
+                intentActivityResultLauncher.launch(editIntent,
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                MainActivity.this,
+                                recyclerView.getChildAt(position),
+                                "item_translation_anim"));
+            }
+        });
+    }
+
+    /**
+     * 处理搜索事件
+     */
+    private void actionBarSearchHandler() {
+        action_bar_search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<Account> accountsQuery = accountMapper.getAccountsByTag(newText, newText);
+                int numOfList = allAccounts.size();
+                allAccounts.clear();
+                itemAdapter.notifyItemRangeRemoved(0, numOfList);
+                allAccounts.addAll(accountsQuery);
+                itemAdapter.notifyItemRangeInserted(0, accountsQuery.size());
+                return false;
+            }
+        });
+
+        action_bar_search_view.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                int numOfList = allAccounts.size();
+                action_bar_search_view.clearFocus();
+                allAccounts.clear();
+                itemAdapter.notifyItemRangeRemoved(0, numOfList);
+                allAccounts.addAll(accountMapper.getAllAccounts());
+                itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+                return false;
+            }
+        });
+
 
     }
 

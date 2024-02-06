@@ -84,7 +84,6 @@ public class AccountMapper {
     //    根据id获取账户数据
     @SuppressLint("Range")
     public Account getAccount(int id) {
-        System.out.println(String.valueOf(id));
         Cursor cursor = accountsReader.query("accounts",
                 null, "id = ? ", new String[]{Integer.toString(id)},
                 null, null, null);

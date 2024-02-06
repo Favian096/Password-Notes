@@ -22,11 +22,19 @@
     <string name="edit_form_remark_title">备注：</string>
     <string name="edit_form_weight_title">重要性：</string>
     <string name="edit_form_time_title">时间：</string>
-    <string name="edit_form_time_text">1706889600</string>
+    <string name="edit_form_time_text">1706889600000</string>
     <string name="edit_form_priority_title">优先级：</string>
     <string name="edit_form_submit_button_text">提交修改</string>
     <string name="edit_form_recycler_button_text">删除账户</string>
     <string name="drawer_page_recycler_text">废纸篓</string>
     <string name="action_bar_edit_item_title">查看和编辑数据</string>
     <string name="action_bar_recycle_item_title">点击恢复-长按永久删除</string>
+    <string name="item_list_card_tag_title">标签名称</string>
+    <string name="item_list_card_name_text">Favian096</string>
+    <string name="item_list_card_password_text">Du_du-0203</string>
+    <string name="item_list_card_remark_text">没有备注......</string>
+    <string name="item_list_recycle_card_tag_text">标签名称</string>
+    <string name="item_list_recycle_card_name_text">Favian096</string>
+    <string name="item_list_recycle_card_password_text">Du_du-0203</string>
+    <string name="item_list_recycle_card_remark_text">没有备注......</string>
 </resources>

@@ -46,7 +46,7 @@ public class SqlLiteDB extends SQLiteOpenHelper {
 //        创建账户的数据表
         db.execSQL(createAccountsTable);
         db.execSQL("INSERT INTO accounts (id, tag, name, password, remark, weight, time, isDelete, priority) " +
-                "VALUES (0, 'dudu', 'dudu_name_string', 'password_string', 'dudu_account', 0, 1643683200000, 2, 1)");
+                "VALUES (0, 'dudu', 'dudu_account', 'dudu_password', 'dudu_remark', 0, 1706889600000, 2, 0)");
     }
 
     @Override

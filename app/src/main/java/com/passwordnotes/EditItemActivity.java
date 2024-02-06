@@ -1,20 +1,9 @@
 package com.passwordnotes;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
-
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -22,10 +11,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,10 +24,8 @@ import java.util.Date;
 public class EditItemActivity extends AppCompatActivity {
     private AccountMapper accountMapper;
     private Account account;
-
     private int id;
     private int position;
-
     private TextView id_text;
     private TextView time_text;
     private RadioGroup edit_radio_group;
@@ -50,9 +38,7 @@ public class EditItemActivity extends AppCompatActivity {
     private EditText edit_password;
     private EditText edit_remark;
     private EditText edit_priority;
-
     private Button submitEdit;
-
     private Button recyclerBtn;
 
     @Override
@@ -72,6 +58,11 @@ public class EditItemActivity extends AppCompatActivity {
         //    提交修改
         submitEdit.setOnClickListener(
                 v -> {
+                    clearEditFormFocus();
+                    if (0 == id) {
+                        Toast.makeText(this, "管理员数据无法修改!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     int weight = account.getWeight();
                     switch (edit_radio_group.getCheckedRadioButtonId()) {
                         case R.id.edit_form_weight_radio_extreme:
@@ -121,6 +112,11 @@ public class EditItemActivity extends AppCompatActivity {
         //    执行回收
         recyclerBtn.setOnClickListener(
                 v -> {
+                    clearEditFormFocus();
+                    if (0 == id) {
+                        Toast.makeText(this, "管理员数据不允许删除!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     recyclerBtn.setTextColor(getColor(R.color.system_burgundy));
                     recyclerBtn.setText("确认删除");
                     recyclerBtn.setOnClickListener(
@@ -135,6 +131,17 @@ public class EditItemActivity extends AppCompatActivity {
                     );
                 }
         );
+    }
+
+    /**
+     * 清除编辑页的输入focus
+     */
+    private void clearEditFormFocus() {
+        edit_tag.clearFocus();
+        edit_name.clearFocus();
+        edit_password.clearFocus();
+        edit_remark.clearFocus();
+        edit_priority.clearFocus();
     }
 
     /**

@@ -1,23 +1,13 @@
 package com.passwordnotes;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.passwordnotes.adapter.RecycleAdapter;
-import com.passwordnotes.adapter.RecyclerListAdapter;
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
 
