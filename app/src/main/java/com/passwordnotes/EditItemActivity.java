@@ -2,14 +2,19 @@ package com.passwordnotes;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -164,8 +169,8 @@ public class EditItemActivity extends AppCompatActivity {
     private void initLayout() {
         ActionBar actionBar = getSupportActionBar();
         if (null != actionBar) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            // actionBar.
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionBar.setCustomView(R.layout.custom_bar_edit_item);
         }
 
         id_text.setText(Integer.toString(account.getId()));

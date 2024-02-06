@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private Button formCancel;
     private Button formConfirm;
     private SearchView action_bar_search_view;
+    // 抽屉页面控件
     private View drawer_recycler_view;
     ActivityResultLauncher<Intent> intentActivityResultLauncher =
             registerForActivityResult(
@@ -211,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
         actionBarSearchHandler();
         itemClickHandler();
 
+        // 标题栏菜单按钮
         baseline_menu.setOnClickListener(
                 v -> {
                     if (!drawerLayout.isOpen()) {
@@ -221,6 +224,26 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        // 跳转回收页面
+        drawer_recycler_view.setOnClickListener(
+                v -> {
+                    Intent recycleIntent = new Intent(MainActivity.this, RecycleItemActivity.class);
+
+                    startActivity(recycleIntent,
+                            ActivityOptions.makeSceneTransitionAnimation(
+                                    MainActivity.this,
+                                    drawer_recycler_view,
+                                    "anim_transition_recycle_item"
+                            ).toBundle());
+                }
+        );
+
+
+        //    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+        //    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     }
 

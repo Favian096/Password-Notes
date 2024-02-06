@@ -27,4 +27,5 @@
     <string name="edit_form_submit_button_text">提交修改</string>
     <string name="edit_form_recycler_button_text">删除账户</string>
     <string name="drawer_page_recycler_text">废纸篓</string>
+    <string name="action_bar_edit_item_title">查看和编辑数据</string>
 </resources>

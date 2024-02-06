@@ -239,16 +239,17 @@
     </com.passwordnotes.config.PullDownLayout>
 
     <LinearLayout
-        android:clickable="true"
-        android:focusable="true"
         android:id="@+id/menu_page"
         android:layout_width="256dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/system_gray_middle"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:transitionName="anim_transition_recycle_item"
             android:id="@+id/drawer_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -283,13 +284,6 @@
             android:layout_marginVertical="5dp"
             android:alpha="0.3"
             android:background="@color/system_gray_middle_up" />
-
-        <Button
-            android:id="@+id/test_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="test" />
 
     </LinearLayout>
 

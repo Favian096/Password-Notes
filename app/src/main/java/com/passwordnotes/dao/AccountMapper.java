@@ -61,7 +61,7 @@ public class AccountMapper {
     public Account getAccount(int id) {
         System.out.println(String.valueOf(id));
         Cursor cursor = accountsReader.query("accounts",
-                null, "id = ?", new String[]{Integer.toString(id)},
+                null, "id = ? ", new String[]{Integer.toString(id)},
                 null, null, null);
         Account account = null;
         if (cursor.moveToFirst()) {
