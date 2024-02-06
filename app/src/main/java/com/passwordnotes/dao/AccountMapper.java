@@ -56,6 +56,31 @@ public class AccountMapper {
         return allAccounts;
     }
 
+    //    获取已经回收的账户数据
+    public ArrayList<Account> getRecycleAccounts() {
+        ArrayList<Account> allAccounts = new ArrayList<>();
+        Cursor cursor = accountsReader.query("accounts",
+                null, "isDelete = ? and id <> ? ", new String[]{Integer.toString(1), Integer.toString(0)},
+                null, null, "priority desc, id desc");
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") Account account = new Account(
+                        Integer.parseInt(cursor.getString(cursor.getColumnIndex("id"))),
+                        cursor.getString(cursor.getColumnIndex("tag")),
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        cursor.getString(cursor.getColumnIndex("password")),
+                        cursor.getString(cursor.getColumnIndex("remark")),
+                        Integer.parseInt(cursor.getString(cursor.getColumnIndex("weight"))),
+                        Long.parseLong(cursor.getString(cursor.getColumnIndex("time"))),
+                        Integer.parseInt(cursor.getString(cursor.getColumnIndex("isDelete"))),
+                        Integer.parseInt(cursor.getString(cursor.getColumnIndex("priority")))
+                );
+                allAccounts.add(account);
+            } while (cursor.moveToNext());
+        }
+        return allAccounts;
+    }
+
     //    根据id获取账户数据
     @SuppressLint("Range")
     public Account getAccount(int id) {
@@ -171,10 +196,26 @@ public class AccountMapper {
         return true;
     }
 
-    public boolean deleteAccount(Account account) {
-        int flag = accountsWriter.delete("accounts", "id = ?", new String[]{String.valueOf(account.getId())});
+    public boolean restoreAccount(int id) {
+        ContentValues accountUpdateValues = new ContentValues();
+        accountUpdateValues.put("isDelete", 0);
+        try {
+            int flag = accountsWriter.update("accounts", accountUpdateValues,
+                    "id = ?", new String[]{Integer.toString(id)});
+            if (1 == flag) {
+                Toast.makeText(context, "账户恢复成功!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "数据异常!\n恢复出错了!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean deleteAccount(int id) {
+        int flag = accountsWriter.delete("accounts", "id = ?", new String[]{String.valueOf(id)});
         if (1 == flag) {
-            Toast.makeText(context, account.getTag() + "账户已删除!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "账户已删除!", Toast.LENGTH_SHORT).show();
         }
         return true;
     }

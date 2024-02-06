@@ -1,6 +1,11 @@
 plugins {
     id 'com.android.application'
 }
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "Password Notes_release_${variant.versionName}.apk"
+    }
+}
 
 android {
     namespace 'com.passwordnotes'

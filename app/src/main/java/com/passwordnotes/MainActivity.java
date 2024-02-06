@@ -10,12 +10,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,7 +42,7 @@ import java.util.List;
 
 import com.passwordnotes.adapter.RecyclerList;
 import com.passwordnotes.adapter.RecyclerListAdapter;
-import com.passwordnotes.config.PullDownLayout;
+import com.passwordnotes.utils.PullDownLayout;
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
 
@@ -238,12 +236,6 @@ public class MainActivity extends AppCompatActivity {
                             ).toBundle());
                 }
         );
-
-
-        //    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-        //    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     }
 
