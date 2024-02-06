@@ -5,63 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:clickable="true"
-        android:focusable="true"
-        android:id="@+id/menu_page"
-        android:layout_width="256dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/system_gray_middle"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/drawer_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="15dp"
-                android:src="@drawable/baseline_delete_24" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:gravity="center_vertical"
-                android:text="@string/drawer_page_recycler_text"
-                android:textColor="@color/system_gray_deep"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="5dp"
-            android:alpha="0.3"
-            android:background="@color/system_gray_middle_up" />
-
-        <Button
-            android:id="@+id/test_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="test" />
-
-
-    </LinearLayout>
-
-    <com.passwordnotes.config.PullDownLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.passwordnotes.config.PullDownLayout
         android:id="@+id/pull_down_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -293,4 +237,60 @@
             android:layout_centerInParent="true"
             android:clickable="true" />
     </com.passwordnotes.config.PullDownLayout>
+
+    <LinearLayout
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/menu_page"
+        android:layout_width="256dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/system_gray_middle"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/drawer_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="15dp"
+                android:src="@drawable/baseline_delete_24" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center_vertical"
+                android:text="@string/drawer_page_recycler_text"
+                android:textColor="@color/system_gray_deep"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="5dp"
+            android:alpha="0.3"
+            android:background="@color/system_gray_middle_up" />
+
+        <Button
+            android:id="@+id/test_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="test" />
+
+    </LinearLayout>
+
 </androidx.drawerlayout.widget.DrawerLayout>
