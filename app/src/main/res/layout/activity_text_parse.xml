@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:transitionName="anim_transition_layout"
+    tools:context=".TextParseActivity">
+
+    <EditText
+        android:id="@+id/text_parse_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/text_parse_edit_box_selector"
+        android:enabled="true"
+        android:focusable="true"
+        android:gravity="top"
+        android:hint="@string/text_parse_edit_text_hint_text"
+        android:inputType="textMultiLine"
+        android:maxLines="16"
+        android:minLines="12"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:textCursorDrawable="@drawable/edit_text_cursor_normal_shape"
+        android:theme="@style/edit_text_line_style" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/text_parse_prompt_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_parse_prompt_edit_text"
+            android:textColor="@color/system_orange"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/text_parse_submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_parse_submit_edit_text"
+            android:textColor="@color/system_blue"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -38,4 +38,16 @@
     <string name="item_list_recycle_card_password_text">Du_du-0203</string>
     <string name="item_list_recycle_card_remark_text">没有备注......</string>
     <string name="drawer_update_item_list_text">更新数据</string>
+    <string name="drawer_page_text_parse_text">文本解析</string>
+    <string name="text_parse_prompt_edit_text">提示</string>
+    <string name="text_parse_submit_edit_text">解析</string>
+    <string name="action_bar_text_parse_title">解析文本以新增数据</string>
+    <string name="text_parse_edit_text_hint_text">!请根据 提示 的格式录入数据:
+    \n1.不要输入其他无关信息
+    \n2.仅支持输入: 标签(必填)、账号、密码
+    \n3.每条数据输入后要换行再输入另一条
+    \n4.每个账户之间空一行
+    \n5.默认重要性"一般"; 不设置备注</string>
+    <string name="text_parse_prompt_text">WeChat\n1706889600000\npassword_birthday\n\n
+    Alipay\n手机号登录\n\n淘宝\n支付宝登录\n......\n</string>
 </resources>

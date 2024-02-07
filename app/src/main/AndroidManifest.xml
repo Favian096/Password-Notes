@@ -13,6 +13,9 @@
         android:theme="@style/Theme.PasswordNotes"
         tools:targetApi="31">
         <activity
+            android:name=".TextParseActivity"
+            android:exported="false" />
+        <activity
             android:name=".RecycleItemActivity"
             android:exported="false"
             android:launchMode="singleTask" />

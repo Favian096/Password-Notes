@@ -40,7 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.Date;
 import java.util.List;
 
-import com.passwordnotes.adapter.RecyclerList;
+import com.passwordnotes.ui.RecyclerList;
 import com.passwordnotes.adapter.RecyclerListAdapter;
 import com.passwordnotes.utils.PullDownLayout;
 import com.passwordnotes.dao.Account;
@@ -68,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
     private Button formConfirm;
     private SearchView action_bar_search_view;
     // 抽屉页面控件
+    private View menuPage;
     private View menu_recycle;
 
     private View menu_update;
+    private View menu_textParse;
 
     @SuppressLint({"MissingInflatedId", "UseCompatLoadingForDrawables"})
     @Override
@@ -119,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
         remarkEditText = findViewById(R.id.input_form_remark_edit_text);
         formCancel = findViewById(R.id.input_form_button_cancel);
         formConfirm = findViewById(R.id.input_form_button_confirm);
+        menuPage = findViewById(R.id.menu_page);
         menu_recycle = findViewById(R.id.drawer_recycler_view);
         menu_update = findViewById(R.id.drawer_update_item_list);
+        menu_textParse = findViewById(R.id.drawer_text_parse_view);
     }
 
     /**
@@ -288,8 +292,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(recycleIntent,
                             ActivityOptions.makeSceneTransitionAnimation(
                                     MainActivity.this,
-                                    menu_recycle,
-                                    "anim_transition_recycle_item"
+                                    menuPage,
+                                    "anim_transition_layout"
                             ).toBundle());
                 }
         );
@@ -297,6 +301,19 @@ public class MainActivity extends AppCompatActivity {
         menu_update.setOnClickListener(
                 v -> {
                     resetItemListData();
+                }
+        );
+
+        menu_textParse.setOnClickListener(
+                v -> {
+                    Intent recycleIntent = new Intent(MainActivity.this, TextParseActivity.class);
+
+                    startActivity(recycleIntent,
+                            ActivityOptions.makeSceneTransitionAnimation(
+                                    MainActivity.this,
+                                    menuPage,
+                                    "anim_transition_layout"
+                            ).toBundle());
                 }
         );
 
