@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
     private Button formConfirm;
     private SearchView action_bar_search_view;
     // 抽屉页面控件
-    private View drawer_recycler_view;
+    private View menu_recycle;
+
+    private View menu_update;
 
     @SuppressLint({"MissingInflatedId", "UseCompatLoadingForDrawables"})
     @Override
@@ -117,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
         remarkEditText = findViewById(R.id.input_form_remark_edit_text);
         formCancel = findViewById(R.id.input_form_button_cancel);
         formConfirm = findViewById(R.id.input_form_button_confirm);
-        drawer_recycler_view = findViewById(R.id.drawer_recycler_view);
+        menu_recycle = findViewById(R.id.drawer_recycler_view);
+        menu_update = findViewById(R.id.drawer_update_item_list);
     }
 
     /**
@@ -222,11 +225,8 @@ public class MainActivity extends AppCompatActivity {
                     if (!accountMapper.saveAccount(newAccount)) {
                         return;
                     }
-                    int numOfList = allAccounts.size();
-                    allAccounts.clear();
-                    itemAdapter.notifyItemRangeRemoved(0, numOfList);
-                    allAccounts.addAll(accountMapper.getAllAccounts());
-                    itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+                    allAccounts.add(0, newAccount);
+                    itemAdapter.notifyItemInserted(0);
                     clearInputFormMsg();
                     pullDownLayout.returnMainPage();
                     clearInputFlingFromFocus();
@@ -281,21 +281,28 @@ public class MainActivity extends AppCompatActivity {
         );
 
         // 跳转回收页面
-        drawer_recycler_view.setOnClickListener(
+        menu_recycle.setOnClickListener(
                 v -> {
                     Intent recycleIntent = new Intent(MainActivity.this, RecycleItemActivity.class);
 
                     startActivity(recycleIntent,
                             ActivityOptions.makeSceneTransitionAnimation(
                                     MainActivity.this,
-                                    drawer_recycler_view,
+                                    menu_recycle,
                                     "anim_transition_recycle_item"
                             ).toBundle());
+                }
+        );
+        // 更新(重置)列表数据
+        menu_update.setOnClickListener(
+                v -> {
+                    resetItemListData();
                 }
         );
 
     }
 
+    /*响应编辑页的数据改变*/
     ActivityResultLauncher<Intent> intentActivityResultLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -353,6 +360,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * 重置一次列表数据
+     */
+    public void resetItemListData() {
+        int numOfList = allAccounts.size();
+        allAccounts.clear();
+        itemAdapter.notifyItemRangeRemoved(0, numOfList);
+        allAccounts.addAll(accountMapper.getAllAccounts());
+        itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+    }
+
+    /**
      * 处理搜索事件
      */
     private void actionBarSearchHandler() {
@@ -377,12 +395,8 @@ public class MainActivity extends AppCompatActivity {
         action_bar_search_view.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                int numOfList = allAccounts.size();
                 action_bar_search_view.clearFocus();
-                allAccounts.clear();
-                itemAdapter.notifyItemRangeRemoved(0, numOfList);
-                allAccounts.addAll(accountMapper.getAllAccounts());
-                itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+                resetItemListData();
                 return false;
             }
         });

@@ -37,4 +37,5 @@
     <string name="item_list_recycle_card_name_text">Favian096</string>
     <string name="item_list_recycle_card_password_text">Du_du-0203</string>
     <string name="item_list_recycle_card_remark_text">没有备注......</string>
+    <string name="drawer_update_item_list_text">更新数据</string>
 </resources>

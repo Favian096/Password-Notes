@@ -32,6 +32,7 @@ public class RecycleItemActivity extends AppCompatActivity {
     }
 
     private void basicOnclickHandler() {
+        /*点击恢复废纸篓的数据*/
         recycleAdapter.setOnItemClickListener(new RecycleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, int id) {
@@ -41,6 +42,7 @@ public class RecycleItemActivity extends AppCompatActivity {
                 }
             }
 
+            /*长按删除废纸篓的数据*/
             @Override
             public void onItemLongClick(int position, int id) {
                 if (accountMapper.deleteAccount(id)) {

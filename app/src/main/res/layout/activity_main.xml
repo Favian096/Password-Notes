@@ -246,17 +246,54 @@
         android:background="@color/system_gray_middle"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:transitionName="anim_transition_recycle_item">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:transitionName="anim_transition_recycle_item"
-            android:id="@+id/drawer_recycler_view"
+            android:id="@+id/drawer_update_item_list"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="15dp"
+                android:src="@drawable/baseline_refresh_24" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center_vertical"
+                android:text="@string/drawer_update_item_list_text"
+                android:textColor="@color/system_gray_deep"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="5dp"
+            android:alpha="0.3"
+            android:background="@color/system_gray_middle_up" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/drawer_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:transitionName="anim_transition_recycle_item">
 
             <ImageView
                 android:layout_width="wrap_content"
