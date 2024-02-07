@@ -55,6 +55,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="8dp"
+                    android:ellipsize="end"
+                    android:maxEms="16"
+                    android:maxLines="1"
                     android:text="@string/item_list_card_tag_title"
                     android:textSize="15sp" />
 
@@ -62,6 +65,9 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:ellipsize="end"
+                android:maxEms="16"
+                android:maxLines="1"
                 android:id="@+id/item_list_card_body_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,6 +85,9 @@
                 android:background="@color/system_gray_middle" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:ellipsize="end"
+                android:maxEms="16"
+                android:maxLines="1"
                 android:id="@+id/item_list_card_body_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,6 +99,9 @@
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:ellipsize="end"
+                android:maxEms="16"
+                android:maxLines="1"
                 android:id="@+id/item_list_card_footer_remark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
