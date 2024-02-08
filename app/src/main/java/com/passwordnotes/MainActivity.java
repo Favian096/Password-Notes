@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
+import android.text.Layout;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,9 +38,11 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import com.passwordnotes.ui.RecyclerList;
 import com.passwordnotes.adapter.RecyclerListAdapter;
@@ -229,8 +233,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!accountMapper.saveAccount(newAccount)) {
                         return;
                     }
-                    allAccounts.add(0, newAccount);
-                    itemAdapter.notifyItemInserted(0);
+                    resetItemListData();
                     clearInputFormMsg();
                     pullDownLayout.returnMainPage();
                     clearInputFlingFromFocus();
@@ -367,10 +370,22 @@ public class MainActivity extends AppCompatActivity {
                 //                         recyclerView.getChildAt(position),
                 //                         "item_translation_anim")
                 //                 .toBundle());
+                // getChildAt(position)获取的View方法在RecycleView未满一屏的时候是没有问题的，但是在满一屏地情况下，是null。
+                RecyclerView.LayoutManager layoutManager = new RecyclerView.LayoutManager() {
+                    @Override
+                    public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                        return null;
+                    }
+                };
+                View itemTarget = layoutManager.findViewByPosition(position);
+                if (null == itemTarget) {
+                    itemTarget = findViewById(R.id.item_list_card);
+                }
                 intentActivityResultLauncher.launch(editIntent,
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                                 MainActivity.this,
-                                recyclerView.getChildAt(position),
+                                // recyclerView.getChildAt(position),
+                                itemTarget,
                                 "item_translation_anim"));
             }
         });
