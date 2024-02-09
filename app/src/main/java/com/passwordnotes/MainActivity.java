@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemLongClick(int position, int id) {
+            public void onItemLongClick(int position, int id, View item) {
                 Intent editIntent = new Intent(MainActivity.this, EditItemActivity.class);
                 editIntent.putExtra("id", id);
                 editIntent.putExtra("position", position);
@@ -371,21 +371,12 @@ public class MainActivity extends AppCompatActivity {
                 //                         "item_translation_anim")
                 //                 .toBundle());
                 // getChildAt(position)获取的View方法在RecycleView未满一屏的时候是没有问题的，但是在满一屏地情况下，是null。
-                RecyclerView.LayoutManager layoutManager = new RecyclerView.LayoutManager() {
-                    @Override
-                    public RecyclerView.LayoutParams generateDefaultLayoutParams() {
-                        return null;
-                    }
-                };
-                View itemTarget = layoutManager.findViewByPosition(position);
-                if (null == itemTarget) {
-                    itemTarget = findViewById(R.id.item_list_card);
-                }
                 intentActivityResultLauncher.launch(editIntent,
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                                 MainActivity.this,
                                 // recyclerView.getChildAt(position),
-                                itemTarget,
+                                // recyclerView.getLayoutManager().findViewByPosition(position),
+                                item,
                                 "item_translation_anim"));
             }
         });

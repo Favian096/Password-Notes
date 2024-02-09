@@ -79,7 +79,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public interface OnItemClickListener {
         void onItemClick(int position, int id);
 
-        void onItemLongClick(int position, int id);
+        void onItemLongClick(int position, int id, View item);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -118,7 +118,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             card.setOnLongClickListener(
                     v -> {
                         if (null != onItemClickListener) {
-                            onItemClickListener.onItemLongClick(getAdapterPosition(), list.get(getAdapterPosition()).getId());
+                            onItemClickListener.onItemLongClick(getAdapterPosition(), list.get(getAdapterPosition()).getId(), item);
                         }
                         return true;
                     }
