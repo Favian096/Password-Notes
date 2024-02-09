@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
+import android.text.Layout;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -37,13 +38,15 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-import com.passwordnotes.adapter.RecyclerList;
+import com.passwordnotes.ui.RecyclerList;
 import com.passwordnotes.adapter.RecyclerListAdapter;
-import com.passwordnotes.config.PullDownLayout;
+import com.passwordnotes.utils.PullDownLayout;
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
 
@@ -68,23 +71,12 @@ public class MainActivity extends AppCompatActivity {
     private Button formCancel;
     private Button formConfirm;
     private SearchView action_bar_search_view;
-    private View drawer_recycler_view;
-    ActivityResultLauncher<Intent> intentActivityResultLauncher =
-            registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
-                    (ActivityResultCallback<ActivityResult>) result -> {
-                        if (result.getData() != null && result.getResultCode() == Activity.RESULT_OK) {
-                            Account account = accountMapper.getAccount(result.getData().getIntExtra("id", 0));
-                            allAccounts.set(result.getData().getIntExtra("position", 0), account);
-                            itemAdapter.notifyItemChanged(result.getData().getIntExtra("position", 0));
-                        } else if (result.getData() != null && result.getResultCode() == Activity.RESULT_FIRST_USER) {
-                            allAccounts.remove(result.getData().getIntExtra("position", 0));
-                            itemAdapter.notifyItemRemoved(result.getData().getIntExtra("position", 0));
-                        }
-                        InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
-                        if (imm.isActive()) // 隐藏键盘
-                            imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    });
+    // 抽屉页面控件
+    private View menuPage;
+    private View menu_recycle;
+
+    private View menu_update;
+    private View menu_textParse;
 
     @SuppressLint({"MissingInflatedId", "UseCompatLoadingForDrawables"})
     @Override
@@ -95,8 +87,72 @@ public class MainActivity extends AppCompatActivity {
         initData();
         initLayout();
         basicOnclickHandler();
+    }
 
-        allAccounts.forEach(System.out::println);
+
+    /**
+     * 初始化标题栏, 在中间嵌入自定义样式View, 优化阴影效果
+     */
+    @SuppressLint("ResourceAsColor")
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Enable 自定义的 View
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            // 绑定自定义的布局
+            actionBar.setCustomView(R.layout.custom_bar);
+            actionBar.setElevation(1);
+        }
+        action_bar_search_view = findViewById(R.id.action_bar_search_view);
+        action_bar_search_view.setQueryHint(Html.fromHtml("<font color = #717171>" + getResources().getString(R.string.action_bar_search_view_text) + "</font>"));
+    }
+
+    /**
+     * 初始化控件
+     * <a>绑定按钮, 文本框, 编辑框...</a>
+     */
+    private void initData() {
+        action_bar_title = findViewById(R.id.action_bar_title);
+        baseline_menu = findViewById(R.id.baseline_menu);
+        pullDownLayout = findViewById(R.id.pull_down_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        recyclerView = findViewById(R.id.recyclerview);
+        accountMapper = new AccountMapper(this);
+        weightRadioGroup = findViewById(R.id.input_form_weight_radio_group);
+        tagEditText = findViewById(R.id.input_form_tag_edit_text);
+        nameEditText = findViewById(R.id.input_form_name_edit_text);
+        passwordEditText = findViewById(R.id.input_form_password_edit_text);
+        remarkEditText = findViewById(R.id.input_form_remark_edit_text);
+        formCancel = findViewById(R.id.input_form_button_cancel);
+        formConfirm = findViewById(R.id.input_form_button_confirm);
+        menuPage = findViewById(R.id.menu_page);
+        menu_recycle = findViewById(R.id.drawer_recycler_view);
+        menu_update = findViewById(R.id.drawer_update_item_list);
+        menu_textParse = findViewById(R.id.drawer_text_parse_view);
+    }
+
+    /**
+     * 初始化布局效果
+     * <a>定义RecyclerView布局</a>
+     * <a>设置drawerLayout抽屉效果</a>
+     * <a>初始化pullDownLayout下拉效果</a>
+     */
+    private void initLayout() {
+        // drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                baseline_menu.setImageDrawable(getDrawable(baseline_menu_24));
+            }
+        });
+
+        allAccounts = accountMapper.getAllAccounts();
+        itemAdapter = new RecyclerListAdapter(this, allAccounts, this.recyclerView);
+        recyclerView.setAdapter(itemAdapter);
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
     }
 
     /**
@@ -126,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 v -> {
                     clearInputFormMsg();
                     pullDownLayout.returnMainPage();
+                    clearInputFlingFromFocus();
                     InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
                     if (imm.isActive()) // 隐藏键盘
                         imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -176,13 +233,10 @@ public class MainActivity extends AppCompatActivity {
                     if (!accountMapper.saveAccount(newAccount)) {
                         return;
                     }
-                    int numOfList = allAccounts.size();
-                    allAccounts.clear();
-                    itemAdapter.notifyItemRangeRemoved(0, numOfList);
-                    allAccounts.addAll(accountMapper.getAllAccounts());
-                    itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+                    resetItemListData();
                     clearInputFormMsg();
                     pullDownLayout.returnMainPage();
+                    clearInputFlingFromFocus();
                     InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
                     if (imm.isActive()) // 隐藏键盘
                         imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -203,6 +257,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * 清除新增填写表单focus
+     */
+    private void clearInputFlingFromFocus() {
+        tagEditText.clearFocus();
+        nameEditText.clearFocus();
+        passwordEditText.clearFocus();
+        remarkEditText.clearFocus();
+    }
+
+    /**
      * 处理页面按钮点击事件
      */
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -211,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
         actionBarSearchHandler();
         itemClickHandler();
 
+        // 标题栏菜单按钮
         baseline_menu.setOnClickListener(
                 v -> {
                     if (!drawerLayout.isOpen()) {
@@ -222,7 +287,58 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+        // 跳转回收页面
+        menu_recycle.setOnClickListener(
+                v -> {
+                    Intent recycleIntent = new Intent(MainActivity.this, RecycleItemActivity.class);
+
+                    startActivity(recycleIntent,
+                            ActivityOptions.makeSceneTransitionAnimation(
+                                    MainActivity.this,
+                                    menuPage,
+                                    "anim_transition_layout"
+                            ).toBundle());
+                }
+        );
+        // 更新(重置)列表数据
+        menu_update.setOnClickListener(
+                v -> {
+                    resetItemListData();
+                }
+        );
+
+        menu_textParse.setOnClickListener(
+                v -> {
+                    Intent recycleIntent = new Intent(MainActivity.this, TextParseActivity.class);
+
+                    startActivity(recycleIntent,
+                            ActivityOptions.makeSceneTransitionAnimation(
+                                    MainActivity.this,
+                                    menuPage,
+                                    "anim_transition_layout"
+                            ).toBundle());
+                }
+        );
+
     }
+
+    /*响应编辑页的数据改变*/
+    ActivityResultLauncher<Intent> intentActivityResultLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    (ActivityResultCallback<ActivityResult>) result -> {
+                        if (result.getData() != null && result.getResultCode() == Activity.RESULT_OK) {
+                            Account account = accountMapper.getAccount(result.getData().getIntExtra("id", 0));
+                            allAccounts.set(result.getData().getIntExtra("position", 0), account);
+                            itemAdapter.notifyItemChanged(result.getData().getIntExtra("position", 0));
+                        } else if (result.getData() != null && result.getResultCode() == Activity.RESULT_FIRST_USER) {
+                            allAccounts.remove(result.getData().getIntExtra("position", 0));
+                            itemAdapter.notifyItemRemoved(result.getData().getIntExtra("position", 0));
+                        }
+                        InputMethodManager imm = (InputMethodManager) this.getSystemService(InputMethodManager.class);
+                        if (imm.isActive()) // 隐藏键盘
+                            imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    });
 
     /**
      * 处理recyclerView列表项目事件
@@ -243,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemLongClick(int position, int id) {
+            public void onItemLongClick(int position, int id, View item) {
                 Intent editIntent = new Intent(MainActivity.this, EditItemActivity.class);
                 editIntent.putExtra("id", id);
                 editIntent.putExtra("position", position);
@@ -254,14 +370,27 @@ public class MainActivity extends AppCompatActivity {
                 //                         recyclerView.getChildAt(position),
                 //                         "item_translation_anim")
                 //                 .toBundle());
-                // System.out.println(accountMapper.getAccount(id).toString());
+                // getChildAt(position)获取的View方法在RecycleView未满一屏的时候是没有问题的，但是在满一屏地情况下，是null。
                 intentActivityResultLauncher.launch(editIntent,
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                                 MainActivity.this,
-                                recyclerView.getChildAt(position),
+                                // recyclerView.getChildAt(position),
+                                // recyclerView.getLayoutManager().findViewByPosition(position),
+                                item,
                                 "item_translation_anim"));
             }
         });
+    }
+
+    /**
+     * 重置一次列表数据
+     */
+    public void resetItemListData() {
+        int numOfList = allAccounts.size();
+        allAccounts.clear();
+        itemAdapter.notifyItemRangeRemoved(0, numOfList);
+        allAccounts.addAll(accountMapper.getAllAccounts());
+        itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
     }
 
     /**
@@ -289,77 +418,12 @@ public class MainActivity extends AppCompatActivity {
         action_bar_search_view.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                int numOfList = allAccounts.size();
-                allAccounts.clear();
-                itemAdapter.notifyItemRangeRemoved(0, numOfList);
-                allAccounts.addAll(accountMapper.getAllAccounts());
-                itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+                action_bar_search_view.clearFocus();
+                resetItemListData();
                 return false;
             }
         });
 
-
-    }
-
-    /**
-     * 初始化标题栏, 在中间嵌入自定义样式View, 优化阴影效果
-     */
-    @SuppressLint("ResourceAsColor")
-    private void initActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Enable 自定义的 View
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            // 绑定自定义的布局
-            actionBar.setCustomView(R.layout.custom_bar);
-            actionBar.setElevation(1);
-        }
-        action_bar_search_view = findViewById(R.id.action_bar_search_view);
-        action_bar_search_view.setQueryHint(Html.fromHtml("<font color = #717171>" + getResources().getString(R.string.action_bar_search_view_text) + "</font>"));
-    }
-
-    /**
-     * 初始化控件
-     * <a>绑定按钮, 文本框, 编辑框...</a>
-     */
-    private void initData() {
-        action_bar_title = findViewById(R.id.action_bar_title);
-        baseline_menu = findViewById(R.id.baseline_menu);
-        pullDownLayout = findViewById(R.id.pull_down_layout);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        recyclerView = findViewById(R.id.recyclerview);
-        accountMapper = new AccountMapper(this);
-        weightRadioGroup = findViewById(R.id.input_form_weight_radio_group);
-        tagEditText = findViewById(R.id.input_form_tag_edit_text);
-        nameEditText = findViewById(R.id.input_form_name_edit_text);
-        passwordEditText = findViewById(R.id.input_form_password_edit_text);
-        remarkEditText = findViewById(R.id.input_form_remark_edit_text);
-        formCancel = findViewById(R.id.input_form_button_cancel);
-        formConfirm = findViewById(R.id.input_form_button_confirm);
-        drawer_recycler_view = findViewById(R.id.drawer_recycler_view);
-    }
-
-    /**
-     * 初始化布局效果
-     * <a>定义RecyclerView布局</a>
-     * <a>设置drawerLayout抽屉效果</a>
-     * <a>初始化pullDownLayout下拉效果</a>
-     */
-    private void initLayout() {
-        // drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                baseline_menu.setImageDrawable(getDrawable(baseline_menu_24));
-            }
-        });
-
-        allAccounts = accountMapper.getAllAccounts();
-        itemAdapter = new RecyclerListAdapter(this, allAccounts, this.recyclerView);
-        recyclerView.setAdapter(itemAdapter);
-        linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
 
     }
 

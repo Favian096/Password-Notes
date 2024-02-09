@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-
     <application
         android:name=".config.InitApplication"
         android:allowBackup="true"
@@ -16,13 +13,20 @@
         android:theme="@style/Theme.PasswordNotes"
         tools:targetApi="31">
         <activity
+            android:name=".TextParseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RecycleItemActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".EditItemActivity"
             android:exported="false"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleInstance">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

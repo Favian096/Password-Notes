@@ -1,4 +1,4 @@
-package com.passwordnotes.adapter;
+package com.passwordnotes.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

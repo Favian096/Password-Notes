@@ -14,6 +14,13 @@ public class Account {
     public Account() {
     }
 
+    public Account(int weight, long time, int isDelete, int priority) {
+        this.weight = weight;
+        this.time = time;
+        this.isDelete = isDelete;
+        this.priority = priority;
+    }
+
     public Account(String tag, String name, String password, String remark, int weight, long time, int isDelete, int priority) {
         this.tag = tag;
         this.name = name;
