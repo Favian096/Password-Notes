@@ -1,0 +1,71 @@
+[33mcommit 8b6f7e6fb6adff71c5463b0083ed4d33744017a1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Sat Feb 10 17:24:54 2024 +0800
+
+    feat: 数据库导出导出
+
+[33mcommit 1bbd87ced12aa1576f59ba8b849c2f970b7f1e92[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Fri Feb 9 21:58:21 2024 +0800
+
+    refactor: 优化item接口
+
+[33mcommit b985a369b59efa2ef5a343cfb2bfd59c85abd5b4[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Thu Feb 8 18:09:35 2024 +0800
+
+    fix: 长按闪退问题
+
+[33mcommit 77131c883c877557b01aea1ed0d3195448dda88a[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Wed Feb 7 18:47:44 2024 +0800
+
+    feat: 文本解析写入
+
+[33mcommit ab151db8ff6aa4e19d34cbc843326864c9db91fb[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Wed Feb 7 12:58:55 2024 +0800
+
+    fix: 列表数据刷新
+
+[33mcommit 8ca0a13fd6c177525974c4cfdd5cc65848c66bab[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Wed Feb 7 12:07:41 2024 +0800
+
+    fix: 文本多行显示问题
+
+[33mcommit 0790ccff012f7a15f5f5c41efbdf194ad130f9da[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Tue Feb 6 21:37:25 2024 +0800
+
+    fix: 编辑框focus取消问题
+
+[33mcommit deaa20e458f2e4e213c0a1d1bfeddafe9723715b[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Tue Feb 6 18:14:58 2024 +0800
+
+    feat: 新增回收功能
+
+[33mcommit 63e6c7998c5cf5f9d711daaadbaa6ffcfec886e0[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Tue Feb 6 16:17:25 2024 +0800
+
+    fix:优化编辑页标题栏
+
+[33mcommit 04ff336a4dc9e15cc5e87398673b5a71b97500ca[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Tue Feb 6 13:43:35 2024 +0800
+
+    fix:抽屉控件点击问题
+
+[33mcommit ae19f02b777b523ae7896099d46c5cc5ec7fef12[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Tue Feb 6 13:37:32 2024 +0800
+
+    fix:修改忽略项
+
+[33mcommit 1b4a710e7ae476fa7613b7d8b6a37b375195fd52[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: Favian096 <98526804+Favian096@users.noreply.github.com>
+Date:   Mon Feb 5 22:10:43 2024 +0800
+
+    init project
