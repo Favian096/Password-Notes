@@ -5,28 +5,21 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.os.Environment;
-import android.os.FileUtils;
 import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
 
+import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
-import com.passwordnotes.dao.SqlLiteDB;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.security.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 public class DataProcess {
     private Context context;
@@ -113,4 +106,45 @@ public class DataProcess {
         }
     }
 
+    /**
+     * 将列表的账户信息导出为txt文档
+     *
+     * @param uri 导出文件夹
+     */
+    public void exportAccountsData(Uri uri) {
+        List<Account> accounts = accountMapper.getAllAccounts();
+        try {
+            DocumentFile pickedDir = DocumentFile.fromTreeUri(context, uri);
+            assert pickedDir != null;
+            DocumentFile file = pickedDir.createFile(
+                    "text/plain",
+                    getTime() + "-" + accountMapper.getAllAccounts().size() + ".txt");
+
+            OutputStream outputStream = context.getContentResolver().openOutputStream(file.getUri(), "wa");
+
+            String info = "!注: 第一行为账户标签\n第二行为账号(可能为空)\n第三行为密码(可能为空)\n";
+            byte[] buffer = info.getBytes();
+            outputStream.write(buffer);
+            outputStream.flush();
+
+            try {
+                for (Account account : accounts) {
+                    outputStream.write(
+                            ("\n" + account.getTag() + "\n" +
+                                    account.getName() + "\n" +
+                                    account.getPassword() + "\n").getBytes()
+                    );
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(context, "账户数据导出完成!", Toast.LENGTH_SHORT).show();
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context, "出错了!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }

@@ -372,15 +372,23 @@ public class MainActivity extends AppCompatActivity {
         // 数据导出
         menu_export.setOnClickListener(
                 v -> {
-                    Log.e("export", "export");
-
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                1);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        exportLauncher.launch(intent);
+                    }
                 }
         );
 
         // 设置页
         menu_setting.setOnClickListener(
                 v -> {
-                    Log.e("setting", "setting");
+                    Toast.makeText(this, "暂时没有设置功能", Toast.LENGTH_SHORT).show();
                 }
         );
 
@@ -435,6 +443,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
     );
+
+    /*响应全部账户导出的文件夹*/
+    ActivityResultLauncher<Intent> exportLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (null != data) {
+                        DataProcess dataProcess = new DataProcess(MainActivity.this);
+                        dataProcess.exportAccountsData(data.getData());
+                    } else {
+                        Toast.makeText(this, "你没有选取文件夹!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
+
 
     /**
      * 处理recyclerView列表项目事件
