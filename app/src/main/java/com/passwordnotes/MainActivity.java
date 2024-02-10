@@ -3,6 +3,7 @@ package com.passwordnotes;
 import static com.passwordnotes.R.drawable.baseline_back_24;
 import static com.passwordnotes.R.drawable.baseline_menu_24;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -10,6 +11,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,7 +37,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +50,7 @@ import java.util.Objects;
 
 import com.passwordnotes.ui.RecyclerList;
 import com.passwordnotes.adapter.RecyclerListAdapter;
+import com.passwordnotes.utils.DataProcess;
 import com.passwordnotes.utils.PullDownLayout;
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
@@ -77,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
     private View menu_update;
     private View menu_textParse;
+
+    private View menu_outputDB;
+    private View menu_inputDB;
+    private View menu_export;
+    private View menu_setting;
 
     @SuppressLint({"MissingInflatedId", "UseCompatLoadingForDrawables"})
     @Override
@@ -129,6 +139,10 @@ public class MainActivity extends AppCompatActivity {
         menu_recycle = findViewById(R.id.drawer_recycler_view);
         menu_update = findViewById(R.id.drawer_update_item_list);
         menu_textParse = findViewById(R.id.drawer_text_parse_view);
+        menu_inputDB = findViewById(R.id.drawer_input_db_view);
+        menu_outputDB = findViewById(R.id.drawer_output_db_view);
+        menu_export = findViewById(R.id.drawer_export_view);
+        menu_setting = findViewById(R.id.drawer_setting_view);
     }
 
     /**
@@ -287,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        // 跳转回收页面
+        // 回收页
         menu_recycle.setOnClickListener(
                 v -> {
                     Intent recycleIntent = new Intent(MainActivity.this, RecycleItemActivity.class);
@@ -300,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
                             ).toBundle());
                 }
         );
+
         // 更新(重置)列表数据
         menu_update.setOnClickListener(
                 v -> {
@@ -307,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+        // 文本解析页
         menu_textParse.setOnClickListener(
                 v -> {
                     Intent recycleIntent = new Intent(MainActivity.this, TextParseActivity.class);
@@ -317,6 +333,54 @@ public class MainActivity extends AppCompatActivity {
                                     menuPage,
                                     "anim_transition_layout"
                             ).toBundle());
+                }
+        );
+
+        // 数据备份
+        menu_outputDB.setOnClickListener(
+                v -> {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                1);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        dbOutputLauncher.launch(intent);
+                    }
+                }
+        );
+
+        // 数据恢复
+        menu_inputDB.setOnClickListener(
+                v -> {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                1);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("application/octet-stream");
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        dbInputLauncher.launch(intent);
+                    }
+                }
+        );
+
+        // 数据导出
+        menu_export.setOnClickListener(
+                v -> {
+                    Log.e("export", "export");
+
+                }
+        );
+
+        // 设置页
+        menu_setting.setOnClickListener(
+                v -> {
+                    Log.e("setting", "setting");
                 }
         );
 
@@ -339,6 +403,38 @@ public class MainActivity extends AppCompatActivity {
                         if (imm.isActive()) // 隐藏键盘
                             imm.hideSoftInputFromWindow(pullDownLayout.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     });
+
+    /*响应选择文件夹输出备份文件*/
+    ActivityResultLauncher<Intent> dbOutputLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (null != data) {
+                        DataProcess dataProcess = new DataProcess(MainActivity.this);
+                        dataProcess.dataBaseBackup(data.getData());
+                    } else {
+                        Toast.makeText(this, "你没有选取文件夹!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
+
+    /*响应选择数据库文件恢复数据*/
+    ActivityResultLauncher<Intent> dbInputLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (null != data) {
+                        DataProcess dataProcess = new DataProcess(MainActivity.this);
+                        dataProcess.dataBaseRestore(data.getData());
+                    } else {
+                        Toast.makeText(this, "你没有选取文件!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
 
     /**
      * 处理recyclerView列表项目事件

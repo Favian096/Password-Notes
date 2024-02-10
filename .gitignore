@@ -14,3 +14,5 @@
 .cxx
 local.properties
 .idea/vcs.xml
+/app/release/output-metadata.json
+/app/release/Password Notes_release_1.3.apk

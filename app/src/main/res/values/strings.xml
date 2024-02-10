@@ -37,7 +37,7 @@
     <string name="item_list_recycle_card_name_text">Favian096</string>
     <string name="item_list_recycle_card_password_text">Du_du-0203</string>
     <string name="item_list_recycle_card_remark_text">没有备注......</string>
-    <string name="drawer_update_item_list_text">更新数据</string>
+    <string name="drawer_update_item_list_text">刷新数据</string>
     <string name="drawer_page_text_parse_text">文本解析</string>
     <string name="text_parse_prompt_edit_text">提示</string>
     <string name="text_parse_submit_edit_text">解析</string>
@@ -50,4 +50,8 @@
     \n5.默认重要性"一般"; 不设置备注</string>
     <string name="text_parse_prompt_text">WeChat\n1706889600000\npassword_birthday\n\n
     Alipay\n手机号登录\n\n淘宝\n支付宝登录\n......\n</string>
+    <string name="drawer_page_output_text">数据备份</string>
+    <string name="drawer_page_input_text">数据恢复</string>
+    <string name="drawer_page_export_text">数据导出</string>
+    <string name="drawer_page_settings_text">设置</string>
 </resources>
