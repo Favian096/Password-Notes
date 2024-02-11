@@ -1,6 +1,7 @@
 package com.passwordnotes.adapter;
 
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             card_name = item.findViewById(R.id.item_list_card_body_name);
             card_password = item.findViewById(R.id.item_list_card_body_password);
             card_remark = item.findViewById(R.id.item_list_card_footer_remark);
-
+            // card_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             card.setOnClickListener(
                     v -> {
                         if (null != onItemClickListener) {

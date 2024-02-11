@@ -43,6 +43,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.passwordnotes.adapter.RecyclerListAdapter;
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
+import com.passwordnotes.ui.Dialog;
 import com.passwordnotes.ui.RecyclerList;
 import com.passwordnotes.utils.DataProcess;
 import com.passwordnotes.utils.PullDownLayout;
@@ -314,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         // 更新(重置)列表数据
         menu_update.setOnClickListener(
                 v -> {
-                    resetItemListData();
+                    Toaster.success("列表数据已更新! 共" + resetItemListData() + "条!");
                 }
         );
 
@@ -343,7 +344,13 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
-                        dbOutputLauncher.launch(intent);
+                        Dialog.show(MainActivity.this,
+                                "备份提示",
+                                "授予权限后,\n选择一个文件夹使用, 作为数据文件的写入位置",
+                                "选择", (dialog, which) -> dbOutputLauncher.launch(intent),
+                                "取消", (dialog, which) -> {
+                                }
+                        );
                     }
                 }
         );
@@ -360,7 +367,13 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         intent.setType("application/octet-stream");
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        dbInputLauncher.launch(intent);
+                        Dialog.show(MainActivity.this,
+                                "恢复提示",
+                                "授予权限后,\n点击备份的数据文件, 数据将会自动写入\n(!注:App原有数据将会被覆盖!)",
+                                "选择", (dialog, which) -> dbInputLauncher.launch(intent),
+                                "取消", (dialog, which) -> {
+                                }
+                        );
                     }
                 }
         );
@@ -376,7 +389,13 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
-                        exportLauncher.launch(intent);
+                        Dialog.show(MainActivity.this,
+                                "导出提示",
+                                "授予权限后,\n选择导出的文件夹, 列表数据将自动生成txt文档\n(!注: 导出数据只有标签、账号、密码)",
+                                "选择", (dialog, which) -> exportLauncher.launch(intent),
+                                "取消", (dialog, which) -> {
+                                }
+                        );
                     }
                 }
         );
@@ -473,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
                     ClipData clipPasswordData = ClipData.newPlainText("密码", allAccounts.get(position).getPassword());
                     clipboard.setPrimaryClip(clipPasswordData);
                 }, 1000);
+                Toaster.success("账号和密码已依次复制到剪贴板!");
             }
 
             @Override
@@ -502,12 +522,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 重置一次列表数据
      */
-    public void resetItemListData() {
+    public int resetItemListData() {
         int numOfList = allAccounts.size();
         allAccounts.clear();
         itemAdapter.notifyItemRangeRemoved(0, numOfList);
         allAccounts.addAll(accountMapper.getAllAccounts());
         itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+        return allAccounts.size();
     }
 
     /**

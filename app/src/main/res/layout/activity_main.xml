@@ -244,7 +244,7 @@
         android:layout_width="256dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/system_gray_middle"
+        android:background="@color/system_gray_little"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
@@ -255,6 +255,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
+            android:background="@drawable/item_list_water_selector"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
@@ -291,6 +292,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
+            android:background="@drawable/item_list_water_selector"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
@@ -327,6 +329,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
+            android:background="@drawable/item_list_water_selector"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
@@ -363,6 +366,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
+            android:background="@drawable/item_list_water_selector"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
@@ -402,6 +406,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
+            android:background="@drawable/item_list_water_selector"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
@@ -441,6 +446,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
+            android:background="@drawable/item_list_water_selector"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
@@ -480,6 +486,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="5dp"
+            android:background="@drawable/item_list_water_selector"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp">
