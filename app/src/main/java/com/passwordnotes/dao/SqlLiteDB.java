@@ -4,10 +4,11 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.passwordnotes.utils.toaster.Toaster;
 
 public class SqlLiteDB extends SQLiteOpenHelper {
 
@@ -51,6 +52,6 @@ public class SqlLiteDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Toast.makeText(activityContext, "数据库暂时不支持升级操作!", Toast.LENGTH_SHORT).show();
+        Toaster.info("数据库暂时不支持升级操作!");
     }
 }

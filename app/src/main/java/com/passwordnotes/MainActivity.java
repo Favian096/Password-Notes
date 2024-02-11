@@ -16,8 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
-import android.text.Layout;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +23,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -42,19 +39,17 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.passwordnotes.adapter.RecyclerListAdapter;
+import com.passwordnotes.dao.Account;
+import com.passwordnotes.dao.AccountMapper;
+import com.passwordnotes.ui.RecyclerList;
+import com.passwordnotes.utils.DataProcess;
+import com.passwordnotes.utils.PullDownLayout;
+import com.passwordnotes.utils.toaster.Toaster;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
-import com.passwordnotes.ui.RecyclerList;
-import com.passwordnotes.adapter.RecyclerListAdapter;
-import com.passwordnotes.utils.DataProcess;
-import com.passwordnotes.utils.PullDownLayout;
-import com.passwordnotes.dao.Account;
-import com.passwordnotes.dao.AccountMapper;
-import com.passwordnotes.utils.toaster.Toaster;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -224,12 +219,12 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
                     if (-1 == weight) {
-                        Toast.makeText(this, "请选择重要性！", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("请选择重要性！");
                         return;
                     }
                     String tag = tagEditText.getText().toString();
                     if (tag.isEmpty()) {
-                        Toast.makeText(this, "标签是必填选项！", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("标签是必填选项！");
                         return;
                     }
                     String name = nameEditText.getText().toString();
@@ -389,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
         // 设置页
         menu_setting.setOnClickListener(
                 v -> {
-                    Toast.makeText(this, "暂时没有设置功能", Toast.LENGTH_SHORT).show();
+                    Toaster.info("暂时还没有设置功能");
                 }
         );
 
@@ -423,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
                         DataProcess dataProcess = new DataProcess(MainActivity.this);
                         dataProcess.dataBaseBackup(data.getData());
                     } else {
-                        Toast.makeText(this, "你没有选取文件夹!", Toast.LENGTH_SHORT).show();
+                        Toaster.info("你没有选取文件夹!");
                     }
                 }
             }
@@ -439,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                         DataProcess dataProcess = new DataProcess(MainActivity.this);
                         dataProcess.dataBaseRestore(data.getData());
                     } else {
-                        Toast.makeText(this, "你没有选取文件!", Toast.LENGTH_SHORT).show();
+                        Toaster.info("你没有选取数据文件!");
                     }
                 }
             }
@@ -455,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
                         DataProcess dataProcess = new DataProcess(MainActivity.this);
                         dataProcess.exportAccountsData(data.getData());
                     } else {
-                        Toast.makeText(this, "你没有选取文件夹!", Toast.LENGTH_SHORT).show();
+                        Toaster.info("你没有选取文件夹!");
                     }
                 }
             }
