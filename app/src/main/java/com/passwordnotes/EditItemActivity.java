@@ -9,13 +9,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
+import com.passwordnotes.utils.toaster.Toaster;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,7 +60,7 @@ public class EditItemActivity extends AppCompatActivity {
                 v -> {
                     clearEditFormFocus();
                     if (0 == id) {
-                        Toast.makeText(this, "管理员数据无法修改!", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("管理员数据无法修改!");
                         return;
                     }
                     int weight = account.getWeight();
@@ -79,7 +79,7 @@ public class EditItemActivity extends AppCompatActivity {
                     }
                     String tag = edit_tag.getText().toString();
                     if (tag.isEmpty()) {
-                        Toast.makeText(this, "标签是必填选项！", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("标签是必填选项！");
                         return;
                     }
                     String name = edit_name.getText().toString();
@@ -87,7 +87,7 @@ public class EditItemActivity extends AppCompatActivity {
                     String remark = edit_remark.getText().toString();
                     int priority = Integer.parseInt(edit_priority.getText().toString());
                     if (priority > 1024 || priority < 0) {
-                        Toast.makeText(this, "优先级必须是0~1024之间的整数！", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("优先级必须是0~1024之间的整数！");
                         return;
                     }
                     accountMapper.updateAccount(new Account(
@@ -114,7 +114,7 @@ public class EditItemActivity extends AppCompatActivity {
                 v -> {
                     clearEditFormFocus();
                     if (0 == id) {
-                        Toast.makeText(this, "管理员数据不允许删除!", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("管理员数据不允许删除!");
                         return;
                     }
                     recyclerBtn.setTextColor(getColor(R.color.system_burgundy));

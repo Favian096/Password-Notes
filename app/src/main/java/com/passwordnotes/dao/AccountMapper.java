@@ -3,13 +3,14 @@ package com.passwordnotes.dao;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+
+import com.passwordnotes.utils.toaster.Toaster;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 提供对于数据库的Accounts表CRUD
@@ -21,7 +22,11 @@ public class AccountMapper {
     public SQLiteDatabase accountsWriter;
     public SQLiteOpenHelper DB;
 
-    //    在提供的构造器内初始化资源
+    /**
+     * 初始化资源
+     *
+     * @param context Activity会话
+     */
     public AccountMapper(Context context) {
         this.context = context;
         DB = new SqlLiteDB(context, "DB", null, 1);
@@ -29,7 +34,11 @@ public class AccountMapper {
         accountsWriter = DB.getWritableDatabase();
     }
 
-    //    获取全部账户数据
+    /**
+     * 获取全部账户数据
+     *
+     * @return 账户数据列表(不包含回收的和管理员数据)
+     */
     public ArrayList<Account> getAllAccounts() {
         ArrayList<Account> allAccounts = new ArrayList<>();
 
@@ -56,11 +65,15 @@ public class AccountMapper {
         return allAccounts;
     }
 
-    //    获取已经回收的账户数据
+    /**
+     * 获取已经回收的账户数据
+     *
+     * @return 已回收的数据
+     */
     public ArrayList<Account> getRecycleAccounts() {
         ArrayList<Account> allAccounts = new ArrayList<>();
         Cursor cursor = accountsReader.query("accounts",
-                null, "isDelete = ? and id <> ? ", new String[]{Integer.toString(1), Integer.toString(0)},
+                null, "isDelete = ? ", new String[]{Integer.toString(1)},
                 null, null, "priority desc, id desc");
         if (cursor.moveToFirst()) {
             do {
@@ -81,7 +94,12 @@ public class AccountMapper {
         return allAccounts;
     }
 
-    //    根据id获取账户数据
+    /**
+     * 根据id获取账户数据
+     *
+     * @param id id值
+     * @return account对象
+     */
     @SuppressLint("Range")
     public Account getAccount(int id) {
         Cursor cursor = accountsReader.query("accounts",
@@ -104,7 +122,13 @@ public class AccountMapper {
         return account;
     }
 
-    //    获取Tag模糊查询账户数据
+    /**
+     * 获取Tag模糊查询账户数据
+     *
+     * @param tag    标签字符串
+     * @param remark 备注字符串
+     * @return 数据列表
+     */
     public ArrayList<Account> getAccountsByTag(String tag, String remark) {
         ArrayList<Account> accountsList = new ArrayList<>();
 
@@ -131,9 +155,15 @@ public class AccountMapper {
         return accountsList;
     }
 
+    /**
+     * 保存账户对象
+     *
+     * @param account 对象
+     * @return 执行状态
+     */
     public boolean saveAccount(Account account) {
         if (account.getTag().isEmpty()) {
-            Toast.makeText(context, "未填写账户标签!", Toast.LENGTH_SHORT).show();
+            Toaster.warm("未填写账户标签!");
             return false;
         }
         ContentValues accountValues = new ContentValues();
@@ -148,13 +178,51 @@ public class AccountMapper {
 
         long flag = accountsWriter.insert("accounts", null, accountValues);
         if (-1 == flag) {
-            Toast.makeText(context, account.getTag() + "账户添加失败!!!", Toast.LENGTH_SHORT).show();
+            Toaster.error("账户添加失败!!!");
             return false;
         }
-        Toast.makeText(context, account.getTag() + "账户添加成功", Toast.LENGTH_SHORT).show();
+        Toaster.success("账户添加成功");
         return true;
     }
 
+    /**
+     * 批量保存账户对象, 适配文本解析
+     *
+     * @param accounts 对象列表
+     * @return 执行状态
+     */
+    public int saveAccountBatch(List<Account> accounts) {
+        int batchNum = accounts.size();
+        for (Account account : accounts) {
+            ContentValues accountValues = new ContentValues();
+            accountValues.put("tag", account.getTag());
+            accountValues.put("name", account.getName());
+            accountValues.put("password", account.getPassword());
+            accountValues.put("remark", "");
+            accountValues.put("weight", 2);
+            accountValues.put("time", System.currentTimeMillis());
+            accountValues.put("isDelete", 0);
+            accountValues.put("priority", 1);
+            long flag = accountsWriter.insert("accounts", null, accountValues);
+            if (-1 == flag) {
+                batchNum--;
+            }
+        }
+        if (batchNum >= 0) {
+            Toaster.success("数据添加成功" + batchNum + "条, "
+                    + "失败" + (accounts.size() - batchNum) + "条!");
+        } else {
+            Toaster.error("数据添加失败! status = " + batchNum);
+        }
+        return batchNum;
+    }
+
+    /**
+     * 根据id更新账户
+     *
+     * @param account 账户对象
+     * @return 执行状态
+     */
     public boolean updateAccount(Account account) {
         ContentValues accountUpdateValues = new ContentValues();
         accountUpdateValues.put("tag", account.getTag());
@@ -170,15 +238,21 @@ public class AccountMapper {
             int flag = accountsWriter.update("accounts", accountUpdateValues,
                     "id = ?", new String[]{String.valueOf(account.getId())});
             if (1 == flag) {
-                Toast.makeText(context, account.getTag() + "账户更新成功!", Toast.LENGTH_SHORT).show();
+                Toaster.success("账户更新成功!");
             }
         } catch (Exception e) {
-            Toast.makeText(context, "数据异常!\n更新出错了!", Toast.LENGTH_SHORT).show();
+            Toaster.error("数据异常!\n更新出错了! account = " + account);
             return false;
         }
         return true;
     }
 
+    /**
+     * 根据id回收账户
+     *
+     * @param id 账户id
+     * @return 执行状态
+     */
     public boolean recyclerAccount(int id) {
         ContentValues accountUpdateValues = new ContentValues();
         accountUpdateValues.put("isDelete", 1);
@@ -186,15 +260,21 @@ public class AccountMapper {
             int flag = accountsWriter.update("accounts", accountUpdateValues,
                     "id = ?", new String[]{Integer.toString(id)});
             if (1 == flag) {
-                Toast.makeText(context, "账户移除成功!", Toast.LENGTH_SHORT).show();
+                Toaster.success("账户移除成功!");
             }
         } catch (Exception e) {
-            Toast.makeText(context, "数据异常!\n删错出错了!", Toast.LENGTH_SHORT).show();
+            Toaster.warm("数据异常!\n删错出错了! id = " + id);
             return false;
         }
         return true;
     }
 
+    /**
+     * 根据id恢复已回收的账户
+     *
+     * @param id id值
+     * @return 执行状态
+     */
     public boolean restoreAccount(int id) {
         ContentValues accountUpdateValues = new ContentValues();
         accountUpdateValues.put("isDelete", 0);
@@ -202,19 +282,25 @@ public class AccountMapper {
             int flag = accountsWriter.update("accounts", accountUpdateValues,
                     "id = ?", new String[]{Integer.toString(id)});
             if (1 == flag) {
-                Toast.makeText(context, "账户恢复成功!", Toast.LENGTH_SHORT).show();
+                Toaster.success("账户恢复成功!");
             }
         } catch (Exception e) {
-            Toast.makeText(context, "数据异常!\n恢复出错了!", Toast.LENGTH_SHORT).show();
+            Toaster.warm("数据异常!\n恢复出错了! id = " + id);
             return false;
         }
         return true;
     }
 
+    /**
+     * 根据id彻底删除账户
+     *
+     * @param id id值
+     * @return 执行状态
+     */
     public boolean deleteAccount(int id) {
         int flag = accountsWriter.delete("accounts", "id = ?", new String[]{String.valueOf(id)});
         if (1 == flag) {
-            Toast.makeText(context, "账户已删除!", Toast.LENGTH_SHORT).show();
+            Toaster.success("账户已删除!");
         }
         return true;
     }

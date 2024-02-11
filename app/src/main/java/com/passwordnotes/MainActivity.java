@@ -16,8 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
-import android.text.Layout;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +23,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -42,18 +39,18 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.passwordnotes.adapter.RecyclerListAdapter;
+import com.passwordnotes.dao.Account;
+import com.passwordnotes.dao.AccountMapper;
+import com.passwordnotes.ui.Dialog;
+import com.passwordnotes.ui.RecyclerList;
+import com.passwordnotes.utils.DataProcess;
+import com.passwordnotes.utils.PullDownLayout;
+import com.passwordnotes.utils.toaster.Toaster;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
-import com.passwordnotes.ui.RecyclerList;
-import com.passwordnotes.adapter.RecyclerListAdapter;
-import com.passwordnotes.utils.DataProcess;
-import com.passwordnotes.utils.PullDownLayout;
-import com.passwordnotes.dao.Account;
-import com.passwordnotes.dao.AccountMapper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -223,12 +220,12 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
                     if (-1 == weight) {
-                        Toast.makeText(this, "请选择重要性！", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("请选择重要性！");
                         return;
                     }
                     String tag = tagEditText.getText().toString();
                     if (tag.isEmpty()) {
-                        Toast.makeText(this, "标签是必填选项！", Toast.LENGTH_SHORT).show();
+                        Toaster.warm("标签是必填选项！");
                         return;
                     }
                     String name = nameEditText.getText().toString();
@@ -318,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         // 更新(重置)列表数据
         menu_update.setOnClickListener(
                 v -> {
-                    resetItemListData();
+                    Toaster.success("列表数据已更新! 共" + resetItemListData() + "条!");
                 }
         );
 
@@ -347,7 +344,13 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
-                        dbOutputLauncher.launch(intent);
+                        Dialog.show(MainActivity.this,
+                                "备份提示",
+                                "授予权限后,\n选择一个文件夹使用, 作为数据文件的写入位置",
+                                "选择", (dialog, which) -> dbOutputLauncher.launch(intent),
+                                "取消", (dialog, which) -> {
+                                }
+                        );
                     }
                 }
         );
@@ -364,7 +367,13 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         intent.setType("application/octet-stream");
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        dbInputLauncher.launch(intent);
+                        Dialog.show(MainActivity.this,
+                                "恢复提示",
+                                "授予权限后,\n点击备份的数据文件, 数据将会自动写入\n(!注:App原有数据将会被覆盖!)",
+                                "选择", (dialog, which) -> dbInputLauncher.launch(intent),
+                                "取消", (dialog, which) -> {
+                                }
+                        );
                     }
                 }
         );
@@ -372,15 +381,29 @@ public class MainActivity extends AppCompatActivity {
         // 数据导出
         menu_export.setOnClickListener(
                 v -> {
-                    Log.e("export", "export");
-
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                1);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        Dialog.show(MainActivity.this,
+                                "导出提示",
+                                "授予权限后,\n选择导出的文件夹, 列表数据将自动生成txt文档\n(!注: 导出数据只有标签、账号、密码)",
+                                "选择", (dialog, which) -> exportLauncher.launch(intent),
+                                "取消", (dialog, which) -> {
+                                }
+                        );
+                    }
                 }
         );
 
         // 设置页
         menu_setting.setOnClickListener(
                 v -> {
-                    Log.e("setting", "setting");
+                    Toaster.info("暂时还没有设置功能");
                 }
         );
 
@@ -414,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
                         DataProcess dataProcess = new DataProcess(MainActivity.this);
                         dataProcess.dataBaseBackup(data.getData());
                     } else {
-                        Toast.makeText(this, "你没有选取文件夹!", Toast.LENGTH_SHORT).show();
+                        Toaster.info("你没有选取文件夹!");
                     }
                 }
             }
@@ -430,11 +453,28 @@ public class MainActivity extends AppCompatActivity {
                         DataProcess dataProcess = new DataProcess(MainActivity.this);
                         dataProcess.dataBaseRestore(data.getData());
                     } else {
-                        Toast.makeText(this, "你没有选取文件!", Toast.LENGTH_SHORT).show();
+                        Toaster.info("你没有选取数据文件!");
                     }
                 }
             }
     );
+
+    /*响应全部账户导出的文件夹*/
+    ActivityResultLauncher<Intent> exportLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (null != data) {
+                        DataProcess dataProcess = new DataProcess(MainActivity.this);
+                        dataProcess.exportAccountsData(data.getData());
+                    } else {
+                        Toaster.info("你没有选取文件夹!");
+                    }
+                }
+            }
+    );
+
 
     /**
      * 处理recyclerView列表项目事件
@@ -452,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
                     ClipData clipPasswordData = ClipData.newPlainText("密码", allAccounts.get(position).getPassword());
                     clipboard.setPrimaryClip(clipPasswordData);
                 }, 1000);
+                Toaster.success("账号和密码已依次复制到剪贴板!");
             }
 
             @Override
@@ -481,12 +522,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 重置一次列表数据
      */
-    public void resetItemListData() {
+    public int resetItemListData() {
         int numOfList = allAccounts.size();
         allAccounts.clear();
         itemAdapter.notifyItemRangeRemoved(0, numOfList);
         allAccounts.addAll(accountMapper.getAllAccounts());
         itemAdapter.notifyItemRangeInserted(0, allAccounts.size());
+        return allAccounts.size();
     }
 
     /**
