@@ -236,6 +236,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:clickable="true" />
+
     </com.passwordnotes.utils.PullDownLayout>
 
     <LinearLayout
