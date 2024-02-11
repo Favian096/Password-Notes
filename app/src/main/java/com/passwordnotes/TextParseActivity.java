@@ -1,26 +1,18 @@
 package com.passwordnotes;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
 import com.passwordnotes.ui.Dialog;
+import com.passwordnotes.utils.toaster.Toaster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,13 +88,11 @@ public class TextParseActivity extends AppCompatActivity {
                         Dialog.show(this,
                                 "内容解析共" + accounts.size() + "组数据",
                                 msg
-                                , "提交", (dialog, which) -> accounts.forEach(account -> {
-                                    accountMapper.saveAccount(account);
-                                }),
+                                , "提交", (dialog, which) -> accountMapper.saveAccountBatch(accounts),
                                 "取消", (dialog, which) -> {
                                 });
                     } else {
-                        Toast.makeText(this, "没有内容可解析!", Toast.LENGTH_SHORT).show();
+                        Toaster.info("没有内容可解析!");
                     }
 
                 }

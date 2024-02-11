@@ -5,12 +5,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
 
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
+import com.passwordnotes.utils.toaster.Toaster;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,13 +67,13 @@ public class DataProcess {
             while ((temp = dbInputStream.read(buffer)) != -1) {  // 读
                 dbOutputStream.write(buffer, 0, temp);   // 写
             }
-            Toast.makeText(context, "数据文件备份完成!", Toast.LENGTH_SHORT).show();
+            Toaster.success("数据文件备份完成! 请检查文件夹内数据文件!");
             dbOutputStream.flush();
             dbInputStream.close();
             dbOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "出错了!", Toast.LENGTH_SHORT).show();
+            Toaster.error("出错了!" + e.getMessage());
         }
     }
 
@@ -99,10 +99,10 @@ public class DataProcess {
             }
             dbOutputStream.flush();
             dbOutputStream.close();
-            Toast.makeText(context, "数据文件恢复完成, 请刷新数据!", Toast.LENGTH_SHORT).show();
+            Toaster.success("数据文件恢复完成, 请重新刷新数据!");
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "数据恢复失败!", Toast.LENGTH_SHORT).show();
+            Toaster.error("数据恢复失败!" + e.getMessage());
         }
     }
 
@@ -138,12 +138,12 @@ public class DataProcess {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Toast.makeText(context, "账户数据导出完成!", Toast.LENGTH_SHORT).show();
+            Toaster.success("账户数据导出完成! 请检查文件夹内文本文件!");
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "出错了!", Toast.LENGTH_SHORT).show();
+            Toaster.error("出错了!" + e.getMessage());
         }
 
     }
