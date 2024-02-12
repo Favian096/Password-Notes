@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHolder> {
 
-    private List<Account> list;
+    private final List<Account> list;
 
     Context activityContext;
 

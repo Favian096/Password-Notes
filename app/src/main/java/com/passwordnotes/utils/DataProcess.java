@@ -22,12 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class DataProcess {
-    private Context context;
+    private final Context context;
     public SQLiteDatabase reader;
     public SQLiteDatabase writer;
     public SQLiteOpenHelper DB;
 
-    private AccountMapper accountMapper;
+    private final AccountMapper accountMapper;
 
     // 初始化资源
     public DataProcess(Context context) {

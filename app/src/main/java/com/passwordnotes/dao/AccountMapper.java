@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class AccountMapper {
-    private Context context;
+    private final Context context;
     public SQLiteDatabase accountsReader;
     public SQLiteDatabase accountsWriter;
     public SQLiteOpenHelper DB;

@@ -19,7 +19,7 @@ import com.passwordnotes.config.Settings;
 import com.passwordnotes.dao.Account;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ViewHolder> {
-    private List<Account> list;
+    private final List<Account> list;
 
     Context activityContext;
 

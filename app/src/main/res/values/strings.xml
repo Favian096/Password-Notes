@@ -49,7 +49,7 @@
     \n4.每个账户之间空一行
     \n5.默认重要性"一般"; 不设置备注</string>
     <string name="text_parse_prompt_text">WeChat\n1706889600000\npassword_birthday\n\n
-    Alipay\n手机号登录\n\n淘宝\n支付宝登录\n......\n</string>
+    Alipay\n手机号登录\n\nTaobao\nUse AliPay Log in\n......\n</string>
     <string name="drawer_page_output_text">数据备份</string>
     <string name="drawer_page_input_text">数据恢复</string>
     <string name="drawer_page_export_text">数据导出</string>

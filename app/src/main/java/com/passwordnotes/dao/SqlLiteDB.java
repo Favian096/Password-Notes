@@ -15,7 +15,7 @@ public class SqlLiteDB extends SQLiteOpenHelper {
     /**
      * 建表语句
      */
-    private Context activityContext;
+    private final Context activityContext;
     private final String createAccountsTable = "CREATE TABLE accounts (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "tag TEXT NOT NULL, " +
