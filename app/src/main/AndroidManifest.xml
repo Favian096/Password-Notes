@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- 添加android.permission.INTERNET后,  应用信息页才会有权限管理-->
+    <!-- 添加android.permission.INTERNET后,  应用信息页才会有权限管理 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -20,8 +20,13 @@
         android:theme="@style/Theme.PasswordNotes"
         tools:targetApi="31">
         <activity
+            android:name=".SettingActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".TextParseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".RecycleItemActivity"
             android:exported="false"

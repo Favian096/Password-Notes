@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,7 +17,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +42,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.passwordnotes.adapter.RecyclerListAdapter;
+import com.passwordnotes.config.Settings;
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
 import com.passwordnotes.ui.Dialog;
@@ -404,7 +405,8 @@ public class MainActivity extends AppCompatActivity {
         // 设置页
         menu_setting.setOnClickListener(
                 v -> {
-                    Toaster.info("暂时还没有设置功能");
+                    settingsLauncher.launch(
+                            new Intent(MainActivity.this, SettingActivity.class));
                 }
         );
 
@@ -476,6 +478,23 @@ public class MainActivity extends AppCompatActivity {
             }
     );
 
+    /*响应设置内容写入*/
+    ActivityResultLauncher<Intent> settingsLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    ContentValues accountUpdateValues = new ContentValues();
+                    accountUpdateValues.put("remark", Settings.settings.toString());
+                    int flag = this.accountMapper.accountsWriter.update("accounts", accountUpdateValues,
+                            "id = ?", new String[]{Integer.toString(0)});
+                    if (1 == flag) {
+                        Toaster.success("设置数据写入成功! 重启APP生效");
+                    } else {
+                        Toaster.success("设置数据写入失败! flag = " + flag);
+                    }
+                }
+            }
+    );
 
     /**
      * 处理recyclerView列表项目事件

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/white" />
+            <size
+                android:width="24dp"
+                android:height="24dp" />
+            <!-- 这里的5dp边距的作用是，圆点在轨道里面的边距，这样的效果感觉更好 -->
+            <stroke
+                android:width="5dp"
+                android:color="@color/transparent" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+</layer-list>

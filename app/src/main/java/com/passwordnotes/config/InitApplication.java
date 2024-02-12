@@ -12,7 +12,10 @@ public class InitApplication extends Application {
 
         /*初始化Toaster*/
         Toaster.init(this);
-    }
 
+        /*初始化设置项*/
+        Settings settings = new Settings(this);
+        settings.init();
+    }
 
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import com.passwordnotes.R;
+import com.passwordnotes.config.Settings;
 import com.passwordnotes.dao.Account;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ViewHolder> {
@@ -107,7 +108,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             card_name = item.findViewById(R.id.item_list_card_body_name);
             card_password = item.findViewById(R.id.item_list_card_body_password);
             card_remark = item.findViewById(R.id.item_list_card_footer_remark);
-            // card_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            if (!Settings.showItemListPassword)
+                card_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             card.setOnClickListener(
                     v -> {
                         if (null != onItemClickListener) {

@@ -54,4 +54,6 @@
     <string name="drawer_page_input_text">数据恢复</string>
     <string name="drawer_page_export_text">数据导出</string>
     <string name="drawer_page_settings_text">设置</string>
+    <string name="action_bar_setting_title">设置</string>
+    <string name="setting_hidden_item_list_password_text">主页列表数据显示密码</string>
 </resources>
