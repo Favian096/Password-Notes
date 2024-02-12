@@ -16,7 +16,7 @@ android {
         minSdk 30
         targetSdk 33
         versionCode 1
-        versionName "1.7"
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,6 +24,9 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+//            minifyEnabled true      // 开启混淆
+//            zipAlignEnabled true    // 已启用压缩
+//            shrinkResources true    // 缩减资源
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -553,15 +554,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        action_bar_search_view.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                action_bar_search_view.clearFocus();
-                resetItemListData();
-                return false;
-            }
+        action_bar_search_view.setOnCloseListener(() -> {
+            action_bar_search_view.clearFocus();
+            resetItemListData();
+            return false;
         });
-
 
     }
 
