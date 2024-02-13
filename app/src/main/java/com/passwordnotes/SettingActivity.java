@@ -9,10 +9,18 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.passwordnotes.config.Settings;
 
+/**
+ * 基本步骤
+ * <p>初始化资源</p>
+ * <p>设置初始状态</p>
+ * <p>响应变化</p>
+ */
 public class SettingActivity extends AppCompatActivity {
 
+    private SwitchCompat hidden_item_list_name;
     private SwitchCompat hidden_item_list_password;
     private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +43,11 @@ public class SettingActivity extends AppCompatActivity {
                     setResult(RESULT_OK, intent);
                 }
         );
-
+        hidden_item_list_name.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Settings.showItemListName = isChecked;
+            Settings.notifySettingsChanged();
+            setResult(RESULT_OK, intent);
+        });
     }
 
     /**
@@ -52,6 +64,7 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         hidden_item_list_password.setChecked(Settings.showItemListPassword);
+        hidden_item_list_name.setChecked(Settings.showItemListName);
 
     }
 
@@ -61,6 +74,7 @@ public class SettingActivity extends AppCompatActivity {
     private void initData() {
         intent = new Intent();
         hidden_item_list_password = findViewById(R.id.setting_hidden_item_list_password);
+        hidden_item_list_name = findViewById(R.id.setting_hidden_item_list_name);
 
     }
 }

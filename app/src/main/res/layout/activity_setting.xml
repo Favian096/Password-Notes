@@ -8,6 +8,19 @@
     tools:context=".SettingActivity">
 
     <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/setting_hidden_item_list_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="@string/setting_hidden_item_list_name_text"
+        android:textColor="@color/system_gray_deep"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:thumb="@drawable/switch_thumb_selector"
+        app:switchMinWidth="30dp"
+        app:track="@drawable/switch_track_selector" />
+
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/setting_hidden_item_list_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +32,5 @@
         android:thumb="@drawable/switch_thumb_selector"
         app:switchMinWidth="30dp"
         app:track="@drawable/switch_track_selector" />
-
 
 </androidx.appcompat.widget.LinearLayoutCompat>

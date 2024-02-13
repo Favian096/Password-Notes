@@ -404,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
                         Dialog.show(MainActivity.this,
                                 "备份提示",
-                                "授予权限后,\n选择一个文件夹使用, 作为数据文件的写入位置",
+                                "选择一个文件夹\n(点击 -使用此文件夹- )\n作为数据文件的写入位置",
                                 "选择", (dialog, which) -> dbOutputLauncher.launch(intent),
                                 "取消", (dialog, which) -> {
                                 }
@@ -434,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         Dialog.show(MainActivity.this,
                                 "恢复提示",
-                                "授予权限后,\n点击备份的数据文件, 数据将会自动写入\n(!注:App原有数据将会被覆盖!)",
+                                "点击备份的数据文件, 数据将会自动写入\n(!注:App原有数据将会被覆盖!)",
                                 "选择", (dialog, which) -> dbInputLauncher.launch(intent),
                                 "取消", (dialog, which) -> {
                                 }
@@ -463,7 +463,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
                         Dialog.show(MainActivity.this,
                                 "导出提示",
-                                "授予权限后,\n选择导出的文件夹, 列表数据将自动生成txt文档\n(!注: 导出数据只有标签、账号、密码)",
+                                "选择一个文件夹\n(点击 -使用此文件夹- )\n列表数据将自动生成txt文档\n(!注: 导出数据只有标签、账号、密码)",
                                 "选择", (dialog, which) -> exportLauncher.launch(intent),
                                 "取消", (dialog, which) -> {
                                 }
