@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/recycle_item_baseline_back"
+            android:id="@+id/setting_baseline_back"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:paddingHorizontal="5dp"
-            android:text="@string/action_bar_recycle_item_title"
+            android:text="@string/action_bar_setting_title"
             android:textColor="@color/system_gray_deep"
             android:textSize="20sp"
             android:textStyle="bold" />

@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class AccountMapper {
-    private Context context;
+    private final Context context;
     public SQLiteDatabase accountsReader;
     public SQLiteDatabase accountsWriter;
     public SQLiteOpenHelper DB;
@@ -133,7 +133,8 @@ public class AccountMapper {
         ArrayList<Account> accountsList = new ArrayList<>();
 
         Cursor cursor = accountsReader.query("accounts",
-                null, "tag like ? or remark like ? ", new String[]{"%" + tag + "%", "%" + remark + "%"},
+                null, "(tag like ? or remark like ?) and (isDelete <> ?) ",
+                new String[]{"%" + tag + "%", "%" + remark + "%", Integer.toString(1)},
                 null, null, "id desc");
 
         if (cursor.moveToFirst()) {

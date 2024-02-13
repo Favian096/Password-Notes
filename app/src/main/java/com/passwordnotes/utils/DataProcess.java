@@ -22,12 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class DataProcess {
-    private Context context;
+    private final Context context;
     public SQLiteDatabase reader;
     public SQLiteDatabase writer;
     public SQLiteOpenHelper DB;
 
-    private AccountMapper accountMapper;
+    private final AccountMapper accountMapper;
 
     // 初始化资源
     public DataProcess(Context context) {
@@ -122,7 +122,7 @@ public class DataProcess {
 
             OutputStream outputStream = context.getContentResolver().openOutputStream(file.getUri(), "wa");
 
-            String info = "!注: 第一行为账户标签\n第二行为账号(可能为空)\n第三行为密码(可能为空)\n";
+            String info = "第一行账户标签\n第二行账号(可能为空)\n第三行密码(可能为空)\n";
             byte[] buffer = info.getBytes();
             outputStream.write(buffer);
             outputStream.flush();

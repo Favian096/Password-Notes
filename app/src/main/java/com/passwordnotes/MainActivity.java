@@ -9,9 +9,11 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +43,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.passwordnotes.adapter.RecyclerListAdapter;
+import com.passwordnotes.config.Settings;
 import com.passwordnotes.dao.Account;
 import com.passwordnotes.dao.AccountMapper;
 import com.passwordnotes.ui.Dialog;
@@ -278,6 +281,54 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * 权限申请回调
+     *
+     * @param requestCode  The request code
+     * @param permissions  The requested permissions.
+     * @param grantResults The grant results for the corresponding permissions
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // 数据库备份
+        if (requestCode == 1) {
+            if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toaster.warm("未授予权限, 无法备份数据文件! ");
+            }
+        }
+        if (requestCode == 2) {
+            if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toaster.warm("未授予权限, 无法读取备份的数据文件! ");
+            }
+        }
+        if (requestCode == 3) {
+            if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toaster.warm("未授予权限, 无法导出数据内容! ");
+            }
+        }
+    }
+
+    /**
+     * 权限检查
+     *
+     * @param context activity
+     * @return 权限状态
+     */
+    private boolean hasStoragePermissions(Context context) {
+        // 版本判断，如果比android 13 就走正常的权限获取
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            int readPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+            int writePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            return readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            int audioPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_AUDIO);
+            int imagePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES);
+            int videoPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_VIDEO);
+            return audioPermission == PackageManager.PERMISSION_GRANTED && imagePermission == PackageManager.PERMISSION_GRANTED && videoPermission == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    /**
      * 处理页面按钮点击事件
      */
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -336,17 +387,24 @@ public class MainActivity extends AppCompatActivity {
         // 数据备份
         menu_outputDB.setOnClickListener(
                 v -> {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    // if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    //         != PackageManager.PERMISSION_GRANTED) {
+                    if (!hasStoragePermissions(MainActivity.this)) {
+                        String[] permissions;
+                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                            permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        } else {
+                            permissions = new String[]{Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO};
+                        }
+                        ActivityCompat.requestPermissions(this,
+                                permissions,
                                 1);
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
                         Dialog.show(MainActivity.this,
                                 "备份提示",
-                                "授予权限后,\n选择一个文件夹使用, 作为数据文件的写入位置",
+                                "选择一个文件夹\n(点击 -使用此文件夹- )\n作为数据文件的写入位置",
                                 "选择", (dialog, which) -> dbOutputLauncher.launch(intent),
                                 "取消", (dialog, which) -> {
                                 }
@@ -358,18 +416,25 @@ public class MainActivity extends AppCompatActivity {
         // 数据恢复
         menu_inputDB.setOnClickListener(
                 v -> {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                1);
+                    // if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    //         != PackageManager.PERMISSION_GRANTED) {
+                    if (!hasStoragePermissions(MainActivity.this)) {
+                        String[] permissions;
+                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                            permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        } else {
+                            permissions = new String[]{Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO};
+                        }
+                        ActivityCompat.requestPermissions(this,
+                                permissions,
+                                2);
                     } else {
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         intent.setType("application/octet-stream");
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         Dialog.show(MainActivity.this,
                                 "恢复提示",
-                                "授予权限后,\n点击备份的数据文件, 数据将会自动写入\n(!注:App原有数据将会被覆盖!)",
+                                "点击备份的数据文件, 数据将会自动写入\n(!注:App原有数据将会被覆盖!)",
                                 "选择", (dialog, which) -> dbInputLauncher.launch(intent),
                                 "取消", (dialog, which) -> {
                                 }
@@ -381,17 +446,24 @@ public class MainActivity extends AppCompatActivity {
         // 数据导出
         menu_export.setOnClickListener(
                 v -> {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                1);
+                    // if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    //         != PackageManager.PERMISSION_GRANTED) {
+                    if (!hasStoragePermissions(MainActivity.this)) {
+                        String[] permissions;
+                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                            permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        } else {
+                            permissions = new String[]{Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO};
+                        }
+                        ActivityCompat.requestPermissions(this,
+                                permissions,
+                                3);
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
                         Dialog.show(MainActivity.this,
                                 "导出提示",
-                                "授予权限后,\n选择导出的文件夹, 列表数据将自动生成txt文档\n(!注: 导出数据只有标签、账号、密码)",
+                                "选择一个文件夹\n(点击 -使用此文件夹- )\n列表数据将自动生成txt文档\n(!注: 导出数据只有标签、账号、密码)",
                                 "选择", (dialog, which) -> exportLauncher.launch(intent),
                                 "取消", (dialog, which) -> {
                                 }
@@ -403,7 +475,8 @@ public class MainActivity extends AppCompatActivity {
         // 设置页
         menu_setting.setOnClickListener(
                 v -> {
-                    Toaster.info("暂时还没有设置功能");
+                    settingsLauncher.launch(
+                            new Intent(MainActivity.this, SettingActivity.class));
                 }
         );
 
@@ -475,6 +548,23 @@ public class MainActivity extends AppCompatActivity {
             }
     );
 
+    /*响应设置内容写入*/
+    ActivityResultLauncher<Intent> settingsLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    ContentValues accountUpdateValues = new ContentValues();
+                    accountUpdateValues.put("remark", Settings.settings.toString());
+                    int flag = this.accountMapper.accountsWriter.update("accounts", accountUpdateValues,
+                            "id = ?", new String[]{Integer.toString(0)});
+                    if (1 == flag) {
+                        Toaster.success("设置数据写入成功! 重启APP生效");
+                    } else {
+                        Toaster.success("设置数据写入失败! flag = " + flag);
+                    }
+                }
+            }
+    );
 
     /**
      * 处理recyclerView列表项目事件
@@ -553,15 +643,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        action_bar_search_view.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                action_bar_search_view.clearFocus();
-                resetItemListData();
-                return false;
-            }
+        action_bar_search_view.setOnCloseListener(() -> {
+            action_bar_search_view.clearFocus();
+            resetItemListData();
+            return false;
         });
-
 
     }
 

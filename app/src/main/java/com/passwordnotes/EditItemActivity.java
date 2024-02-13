@@ -3,7 +3,10 @@ package com.passwordnotes;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -147,7 +150,7 @@ public class EditItemActivity extends AppCompatActivity {
     /**
      * 初始化页面数据
      */
-    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
+    @SuppressLint({"SetTextI18n", "SimpleDateFormat", "ResourceType", "InflateParams"})
     private void initData() {
         accountMapper = new AccountMapper(this);
         this.id = getIntent().getIntExtra("id", 0);
@@ -178,6 +181,8 @@ public class EditItemActivity extends AppCompatActivity {
         if (null != actionBar) {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setCustomView(R.layout.custom_bar_edit_item);
+            actionBar.getCustomView().findViewById(R.id.edit_item_baseline_back)
+                    .setOnClickListener(v -> onBackPressed());
         }
 
         id_text.setText(Integer.toString(account.getId()));

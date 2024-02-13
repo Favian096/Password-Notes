@@ -27,11 +27,11 @@ public abstract class CustomToast implements IToast {
     /** 垂直间距 */
     private float mVerticalMargin;
     /** Toast 动画 */
-    private int mAnimations = android.R.style.Animation_Toast;
+    private final int mAnimations = android.R.style.Animation_Toast;
     /** 短吐司显示的时长，参考至 NotificationManagerService.SHORT_DELAY */
-    private int mShortDuration = 2000;
+    private final int mShortDuration = 2000;
     /** 长吐司显示的时长，参考至 NotificationManagerService.LONG_DELAY */
-    private int mLongDuration = 3500;
+    private final int mLongDuration = 3500;
 
     @Override
     public void setText(int id) {

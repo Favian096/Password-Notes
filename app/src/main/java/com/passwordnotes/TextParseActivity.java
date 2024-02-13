@@ -107,7 +107,8 @@ public class TextParseActivity extends AppCompatActivity {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             // 绑定自定义的布局
             actionBar.setCustomView(R.layout.custom_bar_text_parse);
-            actionBar.setElevation(1);
+            actionBar.getCustomView().findViewById(R.id.text_parse_baseline_back)
+                    .setOnClickListener(v -> onBackPressed());
         }
 
     }

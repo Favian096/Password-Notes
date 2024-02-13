@@ -59,6 +59,8 @@ public class RecycleItemActivity extends AppCompatActivity {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setCustomView(R.layout.custom_bar_recycle);
             actionBar.setElevation(1);
+            actionBar.getCustomView().findViewById(R.id.recycle_item_baseline_back)
+                    .setOnClickListener(v -> onBackPressed());
         }
         recycleItemView.setLayoutManager(new LinearLayoutManager(this));
         recycleItemView.setAdapter(recycleAdapter);
