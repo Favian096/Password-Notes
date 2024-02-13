@@ -46,7 +46,9 @@ public class SettingActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setCustomView(R.layout.custom_bar_setting);
-            actionBar.setElevation(1);
+            actionBar.getCustomView().findViewById(R.id.setting_baseline_back)
+                    .setOnClickListener(v -> onBackPressed());
+
         }
 
         hidden_item_list_password.setChecked(Settings.showItemListPassword);
