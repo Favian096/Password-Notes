@@ -669,6 +669,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 优化返回使用体验
+     */
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isOpen()) {
+            drawerLayout.close();
+        } else if (0 != pullDownLayout.getScrollY()) {
+            pullDownLayout.returnMainPage();
+        } else if (!action_bar_search_view.isIconified()) {
+            action_bar_search_view.setIconified(true);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     /**
      * 关闭数据库
