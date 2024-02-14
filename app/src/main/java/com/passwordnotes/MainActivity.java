@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
 //                        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0)
                         pullDownLayout.openInputPage();
+                        tagEditText.requestFocus();
                         return super.onFling(e1, e2, velocityX, velocityY);
                     }
                 });
