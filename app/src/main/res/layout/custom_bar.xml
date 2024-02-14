@@ -24,8 +24,9 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/action_bar_title"
             android:layout_width="0dp"
+            android:layout_weight="7"
             android:layout_height="?attr/actionBarSize"
-            android:layout_weight="1"
+            android:maxLines="1"
             android:paddingHorizontal="5dp"
             android:gravity="center_vertical"
             android:text="@string/action_bar_title_text"
@@ -35,7 +36,9 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/action_bar_search_view"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:minWidth="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
             android:gravity="center_vertical"
             app:searchHintIcon="@drawable/baseline_search_lighter_24"
