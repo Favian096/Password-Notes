@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".FastAddItemActivity">
+
+    <LinearLayout
+        android:id="@+id/addFormComponents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent_white"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:text="@string/add_form_top_message"
+            android:textColor="@color/system_gray_middle_up"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="@string/input_form_weight_title"
+                android:textColor="@color/system_gray_deep"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/add_form_weight_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/add_form_weight_radio_extreme"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:alpha="0.75"
+                    android:background="@drawable/weight_radio_selector_extreme"
+                    android:button="@null"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:text="@string/input_form_weight_radio_extreme"
+                    android:textColor="@drawable/weight_radio_selector_text_color"
+                    android:textSize="14sp" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/add_form_weight_radio_high"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:alpha="0.75"
+                    android:background="@drawable/weight_radio_selector_high"
+                    android:button="@null"
+                    android:gravity="center"
+
+                    android:text="@string/input_form_weight_radio_high"
+                    android:textColor="@drawable/weight_radio_selector_text_color"
+                    android:textSize="14sp" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/add_form_weight_radio_medium"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:alpha="0.75"
+                    android:background="@drawable/weight_radio_selector_medium"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/input_form_weight_radio_medium"
+                    android:textColor="@drawable/weight_radio_selector_text_color"
+                    android:textSize="14sp" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/add_form_weight_radio_low"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:alpha="0.75"
+                    android:background="@drawable/weight_radio_selector_low"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/input_form_weight_radio_low"
+                    android:textColor="@drawable/weight_radio_selector_text_color"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="@string/input_form_tag_title"
+                android:textColor="@color/system_gray_deep"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/add_form_tag_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:inputType="text"
+                android:textCursorDrawable="@drawable/edit_text_cursor_necessary_shape"
+                android:theme="@style/edit_text_line_style" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="@string/input_form_name_title"
+                android:textColor="@color/system_gray_deep"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/add_form_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:inputType="textVisiblePassword"
+                android:textCursorDrawable="@drawable/edit_text_cursor_normal_shape"
+                android:theme="@style/edit_text_line_style" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="@string/input_form_password_title"
+                android:textColor="@color/system_gray_deep"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/add_form_password_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:inputType="textVisiblePassword"
+                android:textCursorDrawable="@drawable/edit_text_cursor_normal_shape"
+                android:theme="@style/edit_text_line_style" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="@string/input_form_remark_title"
+                android:textColor="@color/system_gray_deep"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/add_form_remark_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:inputType="textMultiLine"
+                android:textCursorDrawable="@drawable/edit_text_cursor_normal_shape"
+                android:theme="@style/edit_text_line_style" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/add_form_button_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/input_form_button_cancel_text" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/add_form_button_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:text="@string/input_form_button_confirm_text" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/add_form_bottom_message"
+            android:textAlignment="center"
+            android:textColor="@color/system_gray_middle_up"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/baseline_add_circle_24"
+        android:shortcutId="fast_add_item_shortcut"
+        android:shortcutLongLabel="@string/fast_add_item_short_text"
+        android:shortcutShortLabel="@string/fast_add_item_short_text">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.passwordnotes.FastAddItemActivity"
+            android:targetPackage="com.passwordnotes" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+</shortcuts>

@@ -21,9 +21,11 @@ import android.text.Html;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import androidx.activity.result.ActivityResult;
@@ -181,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
 //                        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0)
                         pullDownLayout.openInputPage();
+                        tagEditText.requestFocus();
                         return super.onFling(e1, e2, velocityX, velocityY);
                     }
                 });
@@ -625,6 +628,19 @@ public class MainActivity extends AppCompatActivity {
      * 处理搜索事件
      */
     private void actionBarSearchHandler() {
+        action_bar_search_view.setOnSearchClickListener(v ->
+                action_bar_title.setLayoutParams(new LinearLayout.LayoutParams(
+                        0, ViewGroup.LayoutParams.MATCH_PARENT, 0))
+        );
+
+        // 会产生异常显示
+        // action_bar_title.addOnLayoutChangeListener(
+        //         (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+        //             if (!action_bar_search_view.isIconified())
+        //                 action_bar_title.setLayoutParams(new LinearLayout.LayoutParams(
+        //                         0, ViewGroup.LayoutParams.MATCH_PARENT, 0));
+        //         });
+
         action_bar_search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -644,11 +660,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
         action_bar_search_view.setOnCloseListener(() -> {
+            action_bar_title.setLayoutParams(new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.MATCH_PARENT, 7));
+            action_bar_search_view.setLayoutParams(new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.MATCH_PARENT, 1));
             action_bar_search_view.clearFocus();
             resetItemListData();
             return false;
         });
+    }
 
+    /**
+     * 优化返回使用体验
+     */
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isOpen()) {
+            drawerLayout.close();
+        } else if (0 != pullDownLayout.getScrollY()) {
+            pullDownLayout.returnMainPage();
+        } else if (!action_bar_search_view.isIconified()) {
+            action_bar_search_view.setIconified(true);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**

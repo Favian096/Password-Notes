@@ -6,4 +6,16 @@
         <item name="colorControlActivated">@color/system_gray_deep</item>//输入时颜色
     </style>
 
+    <style name="TransparentActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 设置activity背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 状态栏透明 -->
+        <item name="android:statusBarColor">@color/transparent</item>
+        <!-- 设置底部导航栏半透明，默认false黑色，设置true半透明 -->
+        <item name="android:windowTranslucentNavigation">true</item>
+
+    </style>
+
+
 </resources>

@@ -7,9 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-
-    <!-- 适配Android 13, api33+ -->
+        tools:ignore="ScopedStorage" /> <!-- 适配Android 13, api33+ -->
     <uses-permission
         android:name="android.permission.READ_MEDIA_IMAGES"
         android:minSdkVersion="33" />
@@ -31,6 +29,12 @@
         android:theme="@style/Theme.PasswordNotes"
         tools:targetApi="31">
         <activity
+            android:name=".FastAddItemActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@style/TransparentActivityTheme"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity
             android:name=".SettingActivity"
             android:exported="false"
             android:launchMode="singleTask" />
@@ -49,12 +53,16 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
     </application>
 
