@@ -123,7 +123,7 @@ public class AccountMapper {
     }
 
     /**
-     * 获取Tag模糊查询账户数据
+     * 根据Tag或remark模糊查询账户数据
      *
      * @param tag    标签字符串
      * @param remark 备注字符串

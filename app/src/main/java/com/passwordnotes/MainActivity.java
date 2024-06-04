@@ -649,6 +649,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    return true;
+                }
                 List<Account> accountsQuery = accountMapper.getAccountsByTag(newText, newText);
                 int numOfList = allAccounts.size();
                 allAccounts.clear();
