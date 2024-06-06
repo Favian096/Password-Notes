@@ -215,6 +215,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/input_form_button_cancel"
                     android:layout_width="0dp"
+                    android:textColor="@color/system_yellow"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/input_form_button_cancel_text" />
@@ -224,6 +225,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/system_green"
                     android:clickable="false"
                     android:text="@string/input_form_button_confirm_text" />
 
@@ -338,6 +340,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="15dp"
+                android:scaleX="0.7"
+                android:scaleY="0.8"
                 android:src="@drawable/baseline_edit_24" />
 
             <TextView
@@ -456,8 +460,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="15dp"
                 android:scaleType="center"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
                 android:src="@drawable/baseline_export_24" />
 
             <TextView
