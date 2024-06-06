@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#800020</color>
+    <color name="purple_500">#ededed</color>
+    <color name="purple_700">#45b7c1</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FF000000</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="transparent_white">#80717171</color>
+
+    <!--System config color-->
+    <color name="system_red">#ff0001</color>
+    <color name="system_orange">#ff8e01</color>
+    <color name="system_yellow">#ffc901</color>
+    <color name="system_green">#01c841</color>
+    <color name="system_teal">#00caff</color>
+    <color name="system_blue">#007aff</color>
+    <color name="system_indigo">#5554db</color>
+    <color name="system_purple">#bb46e2</color>
+    <color name="system_pink">#ff014e</color>
+
+    <color name="system_burgundy">#800020</color>
+
+    <color name="system_gray_little">#3c3f41</color>
+    <color name="system_gray_middle">#717171</color>
+    <color name="system_gray_middle_up">#ededed</color>
+    <color name="system_gray_deep">#fafafa</color>
+
+</resources>

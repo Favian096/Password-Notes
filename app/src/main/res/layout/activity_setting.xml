@@ -20,6 +20,14 @@
         app:switchMinWidth="30dp"
         app:track="@drawable/switch_track_selector" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="1dp"
+        android:alpha="0.1"
+        android:background="@color/system_gray_middle_up" />
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/setting_hidden_item_list_password"
         android:layout_width="match_parent"
