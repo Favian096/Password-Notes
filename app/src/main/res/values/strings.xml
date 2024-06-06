@@ -42,14 +42,14 @@
     <string name="text_parse_prompt_edit_text">示例</string>
     <string name="text_parse_submit_edit_text">解析</string>
     <string name="action_bar_text_parse_title">解析文本并新增数据</string>
-    <string name="text_parse_edit_text_hint_text">!请根据示例的格式录入数据:
+    <string name="text_parse_edit_text_hint_text">请根据示例的格式录入数据:
     \n1.依照示例不要输入无关信息
     \n2.仅支持输入: 标签(必填)、账号、密码
     \n3.每行数据输入后要换行再输入另一条
     \n4.每个账户(卡片数据)之间空一行
-    \n5.默认重要性"一般"; 不要输入备注</string>
+    \n5.默认重要性"一般", 不要输入备注</string>
     <string name="text_parse_prompt_text">WeChat\n1706889600000\npassword_birthday\n\n
-    Alipay\n手机号登录\n\nTaobao\nUse AliPay Log in\n......\n</string>
+    Alipay\n手机号登录\n\nTaobao\nUse Alipay Log in\n......\n</string>
     <string name="drawer_page_output_text">数据备份</string>
     <string name="drawer_page_input_text">数据恢复</string>
     <string name="drawer_page_export_text">数据导出</string>

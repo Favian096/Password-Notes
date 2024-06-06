@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
+import com.passwordnotes.R;
 
 public class Dialog {
 
@@ -28,8 +31,10 @@ public class Dialog {
         TextView dialogTitle = new TextView(context);
         dialogTitle.setText(titleText);
         dialogTitle.setTypeface(Typeface.DEFAULT_BOLD);
-        dialogTitle.setTextColor(Color.parseColor("#3c3f41"));
-        dialogTitle.setBackgroundColor(Color.parseColor("#fafafa"));
+        dialogTitle.setTextColor(ContextCompat.getColor(context, R.color.system_gray_deep));
+        dialogTitle.setBackgroundColor(ContextCompat.getColor(context, R.color.system_gray_little));
+        // dialogTitle.setTextColor(Color.parseColor("#3c3f41"));
+        // dialogTitle.setBackgroundColor(Color.parseColor("#fafafa"));
         dialogTitle.setTextSize(20);
         dialogTitle.setGravity(Gravity.CENTER);
         dialogTitle.setPadding(0, 20, 0, 20);
@@ -39,7 +44,8 @@ public class Dialog {
         TextView dialogBody = new TextView(context);
         dialogBody.setText(msgText);
         dialogBody.setTextSize(18);
-        dialogBody.setTextColor(Color.parseColor("#3c3f41"));
+        dialogBody.setTextColor(ContextCompat.getColor(context, R.color.system_gray_deep));
+        // dialogBody.setTextColor(Color.parseColor("#3c3f41"));
         dialogBody.setGravity(Gravity.CENTER);
         dialogBody.setPadding(0, 20, 0, 20);
         builder.setView(dialogBody);
@@ -63,8 +69,8 @@ public class Dialog {
         positiveParams.weight = 500;
         positiveParams.setMarginStart(50);
         positiveButton.setLayoutParams(positiveParams);
-        positiveButton.setBackgroundColor(Color.parseColor("#007aff"));
-        positiveButton.setTextColor(Color.parseColor("#ffffff"));
+        positiveButton.setBackgroundColor(ContextCompat.getColor(context, R.color.system_gray_middle));
+        positiveButton.setTextColor(ContextCompat.getColor(context, R.color.system_green));
 
         LinearLayout.LayoutParams negativeParams = (LinearLayout.LayoutParams) negativeButton.getLayoutParams();
         negativeParams.gravity = Gravity.CENTER;
@@ -73,7 +79,7 @@ public class Dialog {
         negativeParams.weight = 500;
 
         negativeButton.setLayoutParams(negativeParams);
-        negativeButton.setBackgroundColor(Color.parseColor("#ededed"));
-        negativeButton.setTextColor(Color.parseColor("#717171"));
+        negativeButton.setBackgroundColor(ContextCompat.getColor(context, R.color.system_gray_middle));
+        negativeButton.setTextColor(ContextCompat.getColor(context, R.color.system_gray_middle_up));
     }
 }

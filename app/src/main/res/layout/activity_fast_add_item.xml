@@ -254,7 +254,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/input_form_button_cancel_text"
-                android:textColor="@color/system_yellow" />
+                android:textColor="@color/system_yellow"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/add_form_button_confirm"
@@ -263,7 +265,9 @@
                 android:layout_weight="1"
                 android:clickable="false"
                 android:text="@string/input_form_button_confirm_text"
-                android:textColor="@color/system_green" />
+                android:textColor="@color/system_green"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
